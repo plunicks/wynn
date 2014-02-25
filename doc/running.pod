@@ -1,0 +1,25 @@
+
+=head1 Running
+
+This document describes how to use the command line epsilon program, which
+...
+
+=head2 Usage
+
+  parrot epsilon.pbc [OPTIONS] <input>
+
+or
+
+  parrot-epsilon@exe [OPTIONS] <input>
+
+A number of additional options are available:
+
+  -q  Quiet mode; suppress output of summary at the end.
+
+=cut
+
+# Local Variables:
+#   fill-column:78
+# End:
+# vim: expandtab shiftwidth=4:
+

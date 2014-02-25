@@ -1,0 +1,13 @@
+
+=head1 Epsilon
+
+=head1 Design
+
+=head1 SEE ALSO
+
+=cut
+
+# Local Variables:
+#   fill-column:78
+# End:
+# vim: expandtab shiftwidth=4:

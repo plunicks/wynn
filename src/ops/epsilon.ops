@@ -1,0 +1,23 @@
+/*
+ * Copyright (C) 20xx, Parrot Foundation.
+ */
+
+BEGIN_OPS_PREAMBLE
+
+#include "parrot/dynext.h"
+
+END_OPS_PREAMBLE
+
+/* Op to get the address of a PMC. */
+inline op epsilon_pmc_addr(out INT, invar PMC)  {
+    $1 = (int) $2;
+    goto NEXT();
+}
+
+/*
+ * Local variables:
+ *   c-file-style: "parrot"
+ * End:
+ * vim: expandtab shiftwidth=4:
+ */
+
