@@ -1,0 +1,9 @@
+.ignore
+*.o
+*.dump
+*.c
+*.h
+*.pbc
+gen_*.pir
+installable_*
+*.so
