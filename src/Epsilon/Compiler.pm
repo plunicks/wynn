@@ -4,4 +4,5 @@ INIT {
     Epsilon::Compiler.language('Epsilon');
     Epsilon::Compiler.parsegrammar(Epsilon::Grammar);
     Epsilon::Compiler.parseactions(Epsilon::Actions);
+    Epsilon::Compiler.commandline_prompt('<ε> ');
 }
