@@ -25,15 +25,6 @@ rule expression {
     <EXPR>
 }
 
-## Terms
-
-token term:sym<integer> { <integer> }
-token term:sym<quote> { <quote> }
-
-proto token quote { <...> }
-token quote:sym<'> { <?[']> <quote_EXPR: ':q'> }
-token quote:sym<"> { <?["]> <quote_EXPR: ':qq'> }
-
 ## Operators
 
 INIT {
@@ -48,3 +39,12 @@ token infix:sym</>  { <sym> <O('%multiplicative, :pirop<div>')> }
 
 token infix:sym<+>  { <sym> <O('%additive, :pirop<add>')> }
 token infix:sym<->  { <sym> <O('%additive, :pirop<sub>')> }
+
+## Terms
+
+token term:sym<integer> { <integer> }
+token term:sym<quote> { <quote> }
+
+proto token quote { <...> }
+token quote:sym<'> { <?[']> <quote_EXPR: ':q'> }
+token quote:sym<"> { <?["]> <quote_EXPR: ':qq'> }
