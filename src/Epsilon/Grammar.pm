@@ -30,6 +30,7 @@ rule expression {
 INIT {
     Epsilon::Grammar.O(':prec<u>, :assoc<left>',  '%multiplicative');
     Epsilon::Grammar.O(':prec<t>, :assoc<left>',  '%additive');
+    Epsilon::Grammar.O(':prec<f>, :assoc<list>',  '%list');
 }
 
 token circumfix:sym<( )> { '(' <.ws> <EXPR> ')' }
@@ -39,6 +40,8 @@ token infix:sym</>  { <sym> <O('%multiplicative')> }
 
 token infix:sym<+>  { <sym> <O('%additive')> }
 token infix:sym<->  { <sym> <O('%additive')> }
+
+token infix:sym<,>  { <sym> <O('%list')> }
 
 ## Terms
 
