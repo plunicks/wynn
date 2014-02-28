@@ -7,7 +7,7 @@ This is the grammar for Epsilon in Perl 6 rules.
 grammar Epsilon::Grammar is HLL::Grammar;
 
 token TOP {
-    <statement_list>
+    <expression>
     [ $ || <.panic: "Syntax error"> ]
 }
 
@@ -19,18 +19,11 @@ token ws {
     [ '#' \N* \n? | \s+ ]*
 }
 
-## Statements
+## Expressions
 
-rule statement_list { [ <statement> | <?> ] ** ';' }
-
-rule statement {
-    | <statement_control>
-    | <EXPR>
+rule expression {
+    <EXPR>
 }
-
-proto token statement_control { <...> }
-rule statement_control:sym<say>   { <sym> [ <EXPR> ] ** ','  }
-rule statement_control:sym<print> { <sym> [ <EXPR> ] ** ','  }
 
 ## Terms
 
