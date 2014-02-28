@@ -5,7 +5,19 @@ method TOP($/) {
 }
 
 method expression($/) {
-    make $<EXPR>.ast;
+    my $past := $<EXPR>.ast;
+
+    for $<postfix_expression> {
+        $past := PAST::Op.new($past, $_.ast, :pasttype<call>, :node($/),
+                              :name('&postcircumfix:sym<' ~
+                                    $_<start> ~ ' ' ~ $_<end> ~ '>'));
+    }
+
+    make $past;
+}
+
+method postfix_expression:sym<[ ]>($/) {
+    make $<expression>.ast;
 }
 
 method circumfix:sym<( )>($/) { make $<EXPR>.ast; }

@@ -15,3 +15,7 @@ sub &infix:<-> ($left, $right) {
 }
 
 sub &infix:<,>(*@args) { @args }
+
+sub &postcircumfix:sym<[ ]> ($left, $right) {
+    $left[$right];
+}

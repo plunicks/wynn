@@ -22,7 +22,7 @@ token ws {
 ## Expressions
 
 rule expression {
-    <EXPR>
+    <EXPR> [ <postfix_expression> ]*
 }
 
 ## Operators
@@ -42,6 +42,10 @@ token infix:sym<+>  { <sym> <O('%additive')> }
 token infix:sym<->  { <sym> <O('%additive')> }
 
 token infix:sym<,>  { <sym> <O('%list')> }
+
+proto rule postfix_expression { <...> }
+
+rule postfix_expression:sym<[ ]> { $<start>='[' <expression> $<end>=']' }
 
 ## Terms
 
