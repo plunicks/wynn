@@ -28,6 +28,7 @@ rule expression {
 ## Operators
 
 INIT {
+    Epsilon::Grammar.O(':prec<z>, :assoc<unary>', '%unary-negative');
     Epsilon::Grammar.O(':prec<u>, :assoc<left>',  '%multiplicative');
     Epsilon::Grammar.O(':prec<t>, :assoc<left>',  '%additive');
     Epsilon::Grammar.O(':prec<f>, :assoc<list>',  '%list');
@@ -35,6 +36,8 @@ INIT {
 }
 
 token circumfix:sym<( )> { '(' <.ws> <EXPR> ')' }
+
+token prefix:sym<-> { <sym> <O('%unary-negative')> }
 
 token infix:sym<*>  { <sym> <O('%multiplicative')> }
 token infix:sym</>  { <sym> <O('%multiplicative')> }

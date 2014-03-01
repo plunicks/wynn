@@ -1,3 +1,7 @@
+sub &prefix:<-> ($expr) {
+    pir::neg($expr);
+}
+
 sub &infix:<*> ($left, $right) {
     pir::mul($left, $right);
 }
