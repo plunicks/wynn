@@ -1,5 +1,9 @@
 sub &postfix:<!> ($expr) {
-    pir::call($expr);
+  Q:PIR {
+      $P0 = find_lex "$expr"
+      $P1 = $P0()
+      .return($P1)
+  }
 }
 
 sub &prefix:<+> ($expr) { +$expr }
@@ -9,7 +13,12 @@ sub &prefix:<-> ($expr) {
 }
 
 sub &infix:<@> ($left, $right) {
-    pir::call($left, $right);
+  Q:PIR {
+      $P0 = find_lex "$left"
+      $P1 = find_lex "$right"
+      $P2 = $P0($P1)
+      .return($P2)
+  }
 }
 
 sub &infix:<*> ($left, $right) {
