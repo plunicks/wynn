@@ -50,21 +50,44 @@ method begin_function($/) {
 method identifier($/) {
     my $name := ~$<identifier>;
 
+    my $scope := 'lexical';
     my $isdecl := 1;
     our @?BLOCK;
 
-    for @?BLOCK {
-        if $_.symbol($name) {
-            $isdecl := 0;
+    # Search for a global and use it, if it exists.
+    my $global := 0;
+
+    # kludge - store_lex requires a PMC:
+    my $true := 1;
+
+  Q:PIR {
+      $P0 = find_lex "$name"
+      $S0 = $P0
+      $P1 = get_hll_global $S0
+
+      if_null $P1, end_global_test
+      $P2 = find_lex "$true"
+      store_lex "$global", $P2
+    end_global_test:
+  };
+
+    if $global {
+        $scope := 'package';
+        $isdecl := 0;
+    } else {
+        for @?BLOCK {
+            if $_.symbol($name) {
+                $isdecl := 0;
+            }
+        }
+
+        if $isdecl {
+            our $?BLOCK;
+            $?BLOCK.symbol($name, :scope<lexical>);
         }
     }
 
-    if $isdecl {
-        our $?BLOCK;
-        $?BLOCK.symbol($name, :scope<lexical>);
-    }
-
-    make PAST::Var.new(:name($name), :scope<lexical>, :isdecl($isdecl),
+    make PAST::Var.new(:name($name), :scope($scope), :isdecl($isdecl),
                        :viviself<Undef>, :node($/));
 }
 
