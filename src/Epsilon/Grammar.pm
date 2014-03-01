@@ -42,8 +42,6 @@ INIT {
     Epsilon::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
 }
 
-token circumfix:sym<( )> { '(' <.ws> <EXPR> ')' }
-
 token prefix:sym<+> { <sym> <O('%unary-negative')> }
 token prefix:sym<-> { <sym> <O('%unary-negative')> }
 
@@ -64,6 +62,8 @@ token infix:sym<;>  { <sym> <O('%sequencing')> }
 proto rule postfix_expression { <...> }
 
 rule postfix_expression:sym<[ ]> { $<start>='[' <expression> $<end>=']' }
+
+token circumfix:sym<( )> { '(' <.ws> <EXPR> ')' }
 
 ## Terms
 
