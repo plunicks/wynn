@@ -32,7 +32,7 @@ rule expression {
 }
 
 rule function {
-    <identifier>? '->' <.begin_function> <expression>
+    [ <identifier> ** ',' ]? '->' <.begin_function> <expression>
 }
 
 token begin_function {
