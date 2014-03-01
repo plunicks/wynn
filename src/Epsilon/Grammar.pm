@@ -37,6 +37,7 @@ INIT {
 
 token circumfix:sym<( )> { '(' <.ws> <EXPR> ')' }
 
+token prefix:sym<+> { <sym> <O('%unary-negative')> }
 token prefix:sym<-> { <sym> <O('%unary-negative')> }
 
 token infix:sym<*>  { <sym> <O('%multiplicative')> }

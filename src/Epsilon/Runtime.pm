@@ -1,3 +1,5 @@
+sub &prefix:<+> ($expr) { +$expr }
+
 sub &prefix:<-> ($expr) {
     pir::neg($expr);
 }
