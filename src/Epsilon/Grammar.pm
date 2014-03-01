@@ -65,6 +65,17 @@ rule postfix_expression:sym<[ ]> { $<start>='[' <expression> $<end>=']' }
 
 token circumfix:sym<( )> { '(' <.ws> <expression> ')' }
 
+token circumfix:sym<{ }> {
+    '{'
+        <.begin_block>
+        <.ws> <expression>
+    '}'
+}
+
+token begin_block {
+    <?>
+}
+
 ## Terms
 
 token term:sym<identifier> {

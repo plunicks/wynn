@@ -32,6 +32,22 @@ method postfix_expression:sym<[ ]>($/) {
 
 method circumfix:sym<( )>($/) { make $<expression>.ast; }
 
+method circumfix:sym<{ }>($/) {
+    our @?BLOCK;
+
+    my $past := @?BLOCK.shift;
+    our $?BLOCK := @?BLOCK[0];
+
+    $past.push($<expression>.ast);
+    make $past;
+}
+
+method begin_block($/) {
+    our @?BLOCK;
+    our $?BLOCK := PAST::Block.new(:blocktype<declaration>, :node($/));
+    @?BLOCK.unshift($?BLOCK);
+}
+
 method term:sym<identifier>($/) {
     my $name := ~$<identifier>;
 
