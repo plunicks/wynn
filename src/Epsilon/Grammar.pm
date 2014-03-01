@@ -44,7 +44,7 @@ rule postfixed_expression {
 }
 
 token identifier {
-    $<identifier>=[ <ident> ** <[\'\-]> ]
+    $<identifier>=[ <ident> [ <ident> | <[\'\-]> ]* ]
 }
 
 ## Operators
