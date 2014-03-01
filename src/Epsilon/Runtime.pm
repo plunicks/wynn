@@ -26,6 +26,8 @@ sub &infix:<:>($left, $right) {
     $right.unshift($left);
 }
 
+sub &infix:<;>($left, $right) { $right }
+
 sub &postcircumfix:sym<[ ]> ($left, $right) {
     $left[$right];
 }
