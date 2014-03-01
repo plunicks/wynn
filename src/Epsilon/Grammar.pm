@@ -7,8 +7,13 @@ This is the grammar for Epsilon in Perl 6 rules.
 grammar Epsilon::Grammar is HLL::Grammar;
 
 token TOP {
+    <.begin_TOP>
     <expression>
     [ $ || <.panic: "Syntax error"> ]
+}
+
+token begin_TOP {
+    <?>
 }
 
 ## Lexer items
@@ -58,6 +63,10 @@ proto rule postfix_expression { <...> }
 rule postfix_expression:sym<[ ]> { $<start>='[' <expression> $<end>=']' }
 
 ## Terms
+
+token term:sym<identifier> {
+    $<identifier>=[ <ident> ** <[\'\-]> ]
+}
 
 token term:sym<integer> { <integer> }
 token term:sym<quote> { <quote> }

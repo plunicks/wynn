@@ -1,7 +1,17 @@
 class Epsilon::Actions is HLL::Actions;
 
 method TOP($/) {
-    make PAST::Block.new( $<expression>.ast, :hll<epsilon>, :node($/) );
+    our @?BLOCK;
+    my $past := @?BLOCK.shift;
+    $past.push($<expression>.ast);
+    make $past;
+}
+
+method begin_TOP($/) {
+    our $?BLOCK := PAST::Block.new(:hll<epsilon>, :node($/),
+                                   :blocktype<declaration>);
+    our @?BLOCK;
+    @?BLOCK.unshift($?BLOCK);
 }
 
 method expression($/) {
@@ -21,6 +31,27 @@ method postfix_expression:sym<[ ]>($/) {
 }
 
 method circumfix:sym<( )>($/) { make $<EXPR>.ast; }
+
+method term:sym<identifier>($/) {
+    my $name := ~$<identifier>;
+
+    my $isdecl := 1;
+    our @?BLOCK;
+
+    for @?BLOCK {
+        if $_.symbol($name) {
+            $isdecl := 0;
+        }
+    }
+
+    if $isdecl {
+        our $?BLOCK;
+        $?BLOCK.symbol($name, :scope<lexical>);
+    }
+
+    make PAST::Var.new(:name($name), :scope<lexical>, :isdecl($isdecl),
+                       :viviself<Undef>, :node($/));
+}
 
 method term:sym<integer>($/) { make $<integer>.ast; }
 method term:sym<quote>($/) { make $<quote>.ast; }
