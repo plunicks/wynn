@@ -16,6 +16,10 @@ sub &infix:<-> ($left, $right) {
 
 sub &infix:<,>(*@args) { @args }
 
+sub &infix:<:>($left, $right) {
+    $right.unshift($left);
+}
+
 sub &postcircumfix:sym<[ ]> ($left, $right) {
     $left[$right];
 }

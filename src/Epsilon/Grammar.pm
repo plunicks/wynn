@@ -31,6 +31,7 @@ INIT {
     Epsilon::Grammar.O(':prec<u>, :assoc<left>',  '%multiplicative');
     Epsilon::Grammar.O(':prec<t>, :assoc<left>',  '%additive');
     Epsilon::Grammar.O(':prec<f>, :assoc<list>',  '%list');
+    Epsilon::Grammar.O(':prec<e>, :assoc<right>', '%cons');
 }
 
 token circumfix:sym<( )> { '(' <.ws> <EXPR> ')' }
@@ -42,6 +43,8 @@ token infix:sym<+>  { <sym> <O('%additive')> }
 token infix:sym<->  { <sym> <O('%additive')> }
 
 token infix:sym<,>  { <sym> <O('%list')> }
+
+token infix:sym<:>  { <sym> <O('%cons')> }
 
 proto rule postfix_expression { <...> }
 
