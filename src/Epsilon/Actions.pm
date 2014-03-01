@@ -10,7 +10,7 @@ method TOP($/) {
 method begin_TOP($/) {
     our $?BLOCK := PAST::Block.new(:hll<epsilon>, :node($/),
                                    :blocktype<declaration>);
-    our @?BLOCK;
+    our @?BLOCK := ();
     @?BLOCK.unshift($?BLOCK);
 }
 
