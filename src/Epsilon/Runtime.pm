@@ -43,3 +43,5 @@ sub &postcircumfix:sym<[ ]> ($left, $right) {
 sub print ($arg) {
     pir::print($arg);
 }
+
+sub return ($arg) { $arg }
