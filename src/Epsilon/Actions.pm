@@ -50,21 +50,23 @@ method begin_function($/) {
 method identifier($/) {
     my $name := ~$<identifier>;
 
+    my $scope := 'package';
     my $isdecl := 1;
     our @?BLOCK;
 
     for @?BLOCK {
         if $_.symbol($name) {
             $isdecl := 0;
+            $scope := 'lexical';
         }
     }
 
-    if $isdecl {
+    if $isdecl && $scope eq 'lexical' {
         our $?BLOCK;
         $?BLOCK.symbol($name, :scope<lexical>);
     }
 
-    make PAST::Var.new(:name($name), :scope<lexical>, :isdecl($isdecl),
+    make PAST::Var.new(:name($name), :scope($scope), :isdecl($isdecl),
                        :viviself<Undef>, :node($/));
 }
 
