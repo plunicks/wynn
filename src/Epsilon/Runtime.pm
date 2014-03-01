@@ -39,3 +39,7 @@ sub &infix:<;>($left, $right) { $right }
 sub &postcircumfix:sym<[ ]> ($left, $right) {
     $left[$right];
 }
+
+sub print ($arg) {
+    pir::print($arg);
+}
