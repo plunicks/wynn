@@ -30,7 +30,7 @@ method postfix_expression:sym<[ ]>($/) {
     make $<expression>.ast;
 }
 
-method circumfix:sym<( )>($/) { make $<EXPR>.ast; }
+method circumfix:sym<( )>($/) { make $<expression>.ast; }
 
 method term:sym<identifier>($/) {
     my $name := ~$<identifier>;

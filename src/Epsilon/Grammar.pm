@@ -63,7 +63,7 @@ proto rule postfix_expression { <...> }
 
 rule postfix_expression:sym<[ ]> { $<start>='[' <expression> $<end>=']' }
 
-token circumfix:sym<( )> { '(' <.ws> <EXPR> ')' }
+token circumfix:sym<( )> { '(' <.ws> <expression> ')' }
 
 ## Terms
 
