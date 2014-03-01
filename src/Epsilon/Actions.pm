@@ -30,10 +30,12 @@ method function($/) {
     @?BLOCK.shift;
     $?BLOCK := @?BLOCK[0];
 
-    my $param := $<identifier>.ast;
-    $param.scope('parameter');
-    $past.push($param);
-    $past.symbol($param.name, :scope<lexical>);
+    for $<identifier> {
+        my $param := $_.ast;
+        $param.scope('parameter');
+        $past.push($param);
+        $past.symbol($param.name, :scope<lexical>);
+    }
 
     $past.push($<expression>.ast);
     make $past;
