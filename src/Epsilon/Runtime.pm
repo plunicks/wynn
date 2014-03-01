@@ -47,6 +47,15 @@ sub &infix:<:>($left, $right) {
     $right.unshift($left);
 }
 
+sub &infix:<$> ($left, $right) {
+  Q:PIR {
+      $P0 = find_lex "$left"
+      $P1 = find_lex "$right"
+      $P2 = $P0($P1)
+      .return($P2)
+  }
+}
+
 sub &infix:<;>($left, $right) { $right }
 
 sub &postcircumfix:sym<[ ]> ($left, $right) {
