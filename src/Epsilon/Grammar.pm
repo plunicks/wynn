@@ -38,6 +38,7 @@ INIT {
     Epsilon::Grammar.O(':prec<t>, :assoc<left>',  '%additive');
     Epsilon::Grammar.O(':prec<f>, :assoc<list>',  '%list');
     Epsilon::Grammar.O(':prec<e>, :assoc<right>', '%cons');
+    Epsilon::Grammar.O(':prec<b>, :assoc<right>', '%assign');
     Epsilon::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
 }
 
@@ -55,6 +56,8 @@ token infix:sym<->  { <sym> <O('%additive')> }
 token infix:sym<,>  { <sym> <O('%list')> }
 
 token infix:sym<:>  { <sym> <O('%cons')> }
+
+token infix:sym<=>  { <sym> <O('%assign, :pasttype<bind>')> }
 
 token infix:sym<;>  { <sym> <O('%sequencing')> }
 
