@@ -27,6 +27,10 @@ token ws {
 ## Expressions
 
 rule expression {
+    $<expression>=<postfixed_expression>
+}
+
+rule postfixed_expression {
     <EXPR> [ <postfix_expression> ]*
 }
 

@@ -15,6 +15,10 @@ method begin_TOP($/) {
 }
 
 method expression($/) {
+    make $<expression>.ast;
+}
+
+method postfixed_expression($/) {
     my $past := $<EXPR>.ast;
 
     for $<postfix_expression> {
