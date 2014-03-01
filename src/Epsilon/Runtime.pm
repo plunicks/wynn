@@ -1,7 +1,15 @@
+sub &postfix:<!> ($expr) {
+    pir::call($expr);
+}
+
 sub &prefix:<+> ($expr) { +$expr }
 
 sub &prefix:<-> ($expr) {
     pir::neg($expr);
+}
+
+sub &infix:<@> ($left, $right) {
+    pir::call($left, $right);
 }
 
 sub &infix:<*> ($left, $right) {

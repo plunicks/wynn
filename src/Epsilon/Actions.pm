@@ -15,7 +15,55 @@ method begin_TOP($/) {
 }
 
 method expression($/) {
-    make $<expression>.ast;
+    if $<function> {
+        make $<function>.ast;
+    } else {
+        make $<postfixed_expression>.ast;
+    }
+}
+
+method function($/) {
+    our @?BLOCK;
+    our $?BLOCK;
+    my $past := $?BLOCK;
+
+    @?BLOCK.shift;
+    $?BLOCK := @?BLOCK[0];
+
+    my $param := $<identifier>.ast;
+    $param.scope('parameter');
+    $past.push($param);
+    $past.symbol($param.name, :scope<lexical>);
+
+    $past.push($<expression>.ast);
+    make $past;
+}
+
+method begin_function($/) {
+    our @?BLOCK;
+    our $?BLOCK := PAST::Block.new(:blocktype<declaration>, :node($/));
+    @?BLOCK.unshift($?BLOCK);
+}
+
+method identifier($/) {
+    my $name := ~$<identifier>;
+
+    my $isdecl := 1;
+    our @?BLOCK;
+
+    for @?BLOCK {
+        if $_.symbol($name) {
+            $isdecl := 0;
+        }
+    }
+
+    if $isdecl {
+        our $?BLOCK;
+        $?BLOCK.symbol($name, :scope<lexical>);
+    }
+
+    make PAST::Var.new(:name($name), :scope<lexical>, :isdecl($isdecl),
+                       :viviself<Undef>, :node($/));
 }
 
 method postfixed_expression($/) {
@@ -53,24 +101,7 @@ method begin_block($/) {
 }
 
 method term:sym<identifier>($/) {
-    my $name := ~$<identifier>;
-
-    my $isdecl := 1;
-    our @?BLOCK;
-
-    for @?BLOCK {
-        if $_.symbol($name) {
-            $isdecl := 0;
-        }
-    }
-
-    if $isdecl {
-        our $?BLOCK;
-        $?BLOCK.symbol($name, :scope<lexical>);
-    }
-
-    make PAST::Var.new(:name($name), :scope<lexical>, :isdecl($isdecl),
-                       :viviself<Undef>, :node($/));
+    make $<identifier>.ast;
 }
 
 method term:sym<integer>($/) { make $<integer>.ast; }

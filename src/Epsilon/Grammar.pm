@@ -27,17 +27,32 @@ token ws {
 ## Expressions
 
 rule expression {
-    $<expression>=<postfixed_expression>
+    | <postfixed_expression>
+    | <function>
+}
+
+rule function {
+    <identifier> '->' <.begin_function> <expression>
+}
+
+token begin_function {
+    <?>
 }
 
 rule postfixed_expression {
     <EXPR> [ <postfix_expression> ]*
 }
 
+token identifier {
+    $<identifier>=[ <ident> ** <[\'\-]> ]
+}
+
 ## Operators
 
 INIT {
-    Epsilon::Grammar.O(':prec<z>, :assoc<unary>', '%unary-negative');
+    Epsilon::Grammar.O(':prec<z>, :assoc<unary>', '%unary-applicative');
+    Epsilon::Grammar.O(':prec<y>, :assoc<unary>', '%unary-negative');
+    Epsilon::Grammar.O(':prec<w>, :assoc<left>',  '%applicative');
     Epsilon::Grammar.O(':prec<u>, :assoc<left>',  '%multiplicative');
     Epsilon::Grammar.O(':prec<t>, :assoc<left>',  '%additive');
     Epsilon::Grammar.O(':prec<f>, :assoc<list>',  '%list');
@@ -46,8 +61,12 @@ INIT {
     Epsilon::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
 }
 
+token postfix:sym<!> { <sym> <O('%unary-applicative')> }
+
 token prefix:sym<+> { <sym> <O('%unary-negative')> }
 token prefix:sym<-> { <sym> <O('%unary-negative')> }
+
+token infix:sym<@>  { <sym> <O('%applicative')> }
 
 token infix:sym<*>  { <sym> <O('%multiplicative')> }
 token infix:sym</>  { <sym> <O('%multiplicative')> }
@@ -83,7 +102,7 @@ token begin_block {
 ## Terms
 
 token term:sym<identifier> {
-    $<identifier>=[ <ident> ** <[\'\-]> ]
+    <identifier>
 }
 
 token term:sym<integer> { <integer> }
