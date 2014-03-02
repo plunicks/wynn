@@ -7,6 +7,7 @@ This is the grammar for Epsilon in Perl 6 rules.
 grammar Epsilon::Grammar is HLL::Grammar;
 
 token TOP {
+    ^ <hashbang>?
     <.begin_TOP>
     <expression>
     [ $ || <.panic: "Syntax error"> ]
@@ -14,6 +15,10 @@ token TOP {
 
 token begin_TOP {
     <?>
+}
+
+token hashbang {
+    '#!' \N*
 }
 
 ## Lexer items
