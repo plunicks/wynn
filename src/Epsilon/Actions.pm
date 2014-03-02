@@ -129,6 +129,10 @@ method term:sym<identifier>($/) {
     make $<identifier>.ast;
 }
 
+method term:sym<nil>($/) {
+    make PAST::Val.new(:returns<ResizablePMCArray>, :value(), :node($/));
+}
+
 method term:sym<integer>($/) { make $<integer>.ast; }
 method term:sym<quote>($/) { make $<quote>.ast; }
 

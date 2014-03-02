@@ -109,6 +109,8 @@ token term:sym<identifier> {
     <identifier>
 }
 
+token term:sym<nil> { }
+
 token term:sym<integer> { <integer> }
 token term:sym<quote> { <quote> }
 
