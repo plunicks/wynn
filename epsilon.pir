@@ -24,7 +24,7 @@ to the Epsilon compiler.
     load_language 'epsilon'
 
     $P0 = compreg 'Epsilon'
-    $P1 = $P0.'command_line'(args)
+    $P1 = $P0.'command_line'(args, 'encoding' => 'utf8')
 .end
 
 =back
