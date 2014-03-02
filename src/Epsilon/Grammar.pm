@@ -47,6 +47,7 @@ INIT {
     Epsilon::Grammar.O(':prec<m>, :assoc<left>',  '%applicative');
     Epsilon::Grammar.O(':prec<k>, :assoc<left>',  '%multiplicative');
     Epsilon::Grammar.O(':prec<j>, :assoc<left>',  '%additive');
+    Epsilon::Grammar.O(':prec<h>, :assoc<left>',  '%comparative');
     Epsilon::Grammar.O(':prec<f>, :assoc<list>',  '%list');
     Epsilon::Grammar.O(':prec<e>, :assoc<right>', '%cons');
     Epsilon::Grammar.O(':prec<b>, :assoc<right>', '%assign');
@@ -75,6 +76,13 @@ token infix:sym</>  { <sym> <O('%multiplicative')> }
 token infix:sym<+>  { <sym> <O('%additive')> }
 token infix:sym<->  { <sym> <O('%additive')> }
 token infix:sym<~>  { <sym> <O('%additive')> }
+
+token infix:sym«<»  { <sym> <O('%comparative, :pasttype<chain>')> }
+token infix:sym«>»  { <sym> <O('%comparative, :pasttype<chain>')> }
+token infix:sym«<=» { <sym> <O('%comparative, :pasttype<chain>')> }
+token infix:sym«>=» { <sym> <O('%comparative, :pasttype<chain>')> }
+token infix:sym«==» { <sym> <O('%comparative, :pasttype<chain>')> }
+token infix:sym«!=» { <sym> <O('%comparative, :pasttype<chain>')> }
 
 token infix:sym<,>  { <sym> <O('%list')> }
 

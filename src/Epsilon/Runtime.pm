@@ -41,6 +41,14 @@ sub &infix:<~> ($left, $right) {
     pir::concat($left, $right);
 }
 
+
+sub &infix:«<»  ($left, $right) { $left < $right }
+sub &infix:«>»  ($left, $right) { $left > $right }
+sub &infix:«<=» ($left, $right) { $left <= $right }
+sub &infix:«>=» ($left, $right) { $left >= $right }
+sub &infix:«==» ($left, $right) { $left == $right }
+sub &infix:«!=» ($left, $right) { $left != $right }
+
 sub &infix:<,>(*@args) { @args }
 
 sub &infix:<:>($left, $right) {
