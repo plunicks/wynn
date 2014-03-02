@@ -23,6 +23,17 @@ method postcircumfix:sym<[ ]>($/) {
                       :name('&postcircumfix:<[ ]>'), :node($/));
 }
 
+method prefix:sym«->»($/) {
+    our @?BLOCK;
+    our $?BLOCK;
+    my $past := $?BLOCK;
+
+    @?BLOCK.shift;
+    $?BLOCK := @?BLOCK[0];
+
+    make $past;
+}
+
 method infix:sym«->»($/) {
     our @?BLOCK;
     our $?BLOCK;
