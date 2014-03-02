@@ -124,7 +124,12 @@ token begin_block {
 ## Terms
 
 token identifier {
-    $<identifier>=[ <ident> ** <[\'\-]>* <[\']>* ]
+    | <quoted_identifier>
+    | $<identifier>=[ <ident> ** <[\'\-]>* <[\']>* ]
+}
+
+token quoted_identifier {
+    '{"' $<identifier>=[\N*?] '"}'
 }
 
 token term:sym<parameter> {

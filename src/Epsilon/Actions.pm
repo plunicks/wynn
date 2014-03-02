@@ -70,6 +70,14 @@ method begin_block($/) {
 }
 
 method identifier($/) {
+    if $<quoted_identifier> {
+        make $<quoted_identifier>.ast;
+    } else {
+        make PAST::Var.new(:name(~$<identifier>), :node($/));
+    }
+}
+
+method quoted_identifier($/) {
     make PAST::Var.new(:name(~$<identifier>), :node($/));
 }
 
