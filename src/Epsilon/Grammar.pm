@@ -129,7 +129,7 @@ token identifier {
 }
 
 token quoted_identifier {
-    '{"' $<identifier>=[\N*?] '"}'
+    '«' $<identifier>=[\N*?] '»'
 }
 
 token term:sym<parameter> {
