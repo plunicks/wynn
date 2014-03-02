@@ -65,7 +65,7 @@ method circumfix:sym<{ }>($/) {
 
 method begin_block($/) {
     our @?BLOCK;
-    our $?BLOCK := PAST::Block.new(:blocktype<declaration>, :node($/));
+    our $?BLOCK := PAST::Block.new(:blocktype<immediate>, :node($/));
     @?BLOCK.unshift($?BLOCK);
 }
 
