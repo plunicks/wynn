@@ -27,8 +27,8 @@ token ws {
 ## Expressions
 
 rule expression {
-    | <postfixed_expression>
     | <function>
+    | <EXPR>
 }
 
 rule function {
@@ -39,10 +39,6 @@ token begin_function {
     <?>
 }
 
-rule postfixed_expression {
-    <EXPR> [ <postfix_expression> ]*
-}
-
 token identifier {
     $<identifier>=[ <ident> [ <ident> | <[\'\-]> ]* ]
 }
@@ -50,6 +46,7 @@ token identifier {
 ## Operators
 
 INIT {
+    Epsilon::Grammar.O(':prec<z>, :assoc<unary>', '%postcircumfix');
     Epsilon::Grammar.O(':prec<z>, :assoc<unary>', '%unary-applicative');
     Epsilon::Grammar.O(':prec<y>, :assoc<unary>', '%unary-negative');
     Epsilon::Grammar.O(':prec<w>, :assoc<left>',  '%applicative');
@@ -60,6 +57,11 @@ INIT {
     Epsilon::Grammar.O(':prec<b>, :assoc<right>', '%assign');
     Epsilon::Grammar.O(':prec<a>, :assoc<right>', '%applicative-low');
     Epsilon::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
+}
+
+token postcircumfix:sym<[ ]> {
+    '[' <expression> ']'
+    <O('%postcircumfix')>
 }
 
 token postfix:sym<!> { <sym> <O('%unary-applicative')> }
@@ -86,10 +88,6 @@ token infix:sym<=>  { <sym> <O('%assign, :pasttype<bind>')> }
 token infix:sym<$>  { <sym> <O('%applicative-low')> }
 
 token infix:sym<;>  { <sym> <O('%sequencing')> }
-
-proto rule postfix_expression { <...> }
-
-rule postfix_expression:sym<[ ]> { $<start>='[' <expression> $<end>=']' }
 
 token circumfix:sym<( )> { '(' <.ws> <expression> ')' }
 

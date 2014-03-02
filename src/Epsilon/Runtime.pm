@@ -58,7 +58,7 @@ sub &infix:<$> ($left, $right) {
 
 sub &infix:<;>($left, $right) { $right }
 
-sub &postcircumfix:sym<[ ]> ($left, $right) {
+sub &postcircumfix:<[ ]> ($left, $right) {
     $left[$right];
 }
 

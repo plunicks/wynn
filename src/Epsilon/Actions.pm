@@ -18,7 +18,7 @@ method expression($/) {
     if $<function> {
         make $<function>.ast;
     } else {
-        make $<postfixed_expression>.ast;
+        make $<EXPR>.ast;
     }
 }
 
@@ -91,20 +91,9 @@ method identifier($/) {
                        :viviself<Undef>, :node($/));
 }
 
-method postfixed_expression($/) {
-    my $past := $<EXPR>.ast;
-
-    for $<postfix_expression> {
-        $past := PAST::Op.new($past, $_.ast, :pasttype<call>, :node($/),
-                              :name('&postcircumfix:sym<' ~
-                                    $_<start> ~ ' ' ~ $_<end> ~ '>'));
-    }
-
-    make $past;
-}
-
-method postfix_expression:sym<[ ]>($/) {
-    make $<expression>.ast;
+method postcircumfix:sym<[ ]>($/) {
+    make PAST::Op.new($<expression>.ast, :pasttype<call>,
+                      :name('&postcircumfix:<[ ]>'), :node($/));
 }
 
 method circumfix:sym<( )>($/) { make $<expression>.ast; }
