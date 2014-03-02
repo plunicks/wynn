@@ -64,6 +64,7 @@ INIT {
 
 token postfix:sym<!> { <sym> <O('%unary-applicative')> }
 
+# these are only optimizations - nil makes them redundant
 token prefix:sym<+> { <sym> <O('%unary-negative')> }
 token prefix:sym<-> { <sym> <O('%unary-negative')> }
 
