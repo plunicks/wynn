@@ -50,10 +50,10 @@ INIT {
     Epsilon::Grammar.O(':prec<h>, :assoc<left>',  '%comparative');
     Epsilon::Grammar.O(':prec<f>, :assoc<list>',  '%list');
     Epsilon::Grammar.O(':prec<e>, :assoc<right>', '%cons');
+    Epsilon::Grammar.O(':prec<c>, :assoc<unary>', '%unary-function');
+    Epsilon::Grammar.O(':prec<c>, :assoc<right>', '%function');
     Epsilon::Grammar.O(':prec<b>, :assoc<right>', '%assign');
     Epsilon::Grammar.O(':prec<a>, :assoc<right>', '%applicative-low');
-    Epsilon::Grammar.O(':prec<X>, :assoc<unary>', '%unary-function');
-    Epsilon::Grammar.O(':prec<X>, :assoc<right>', '%function');
     Epsilon::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
 }
 
@@ -88,10 +88,6 @@ token infix:sym<,>  { <sym> <O('%list')> }
 
 token infix:sym<:>  { <sym> <O('%cons')> }
 
-token infix:sym<=>  { <sym> <O('%assign, :pasttype<bind>')> }
-
-token infix:sym<$>  { <sym> <O('%applicative-low')> }
-
 token prefix:sym«->» {
     <sym> <.begin_function>
     <O('%unary-function')>
@@ -101,6 +97,10 @@ token infix:sym«->» {
     <sym> <.begin_function>
     <O('%function')>
 }
+
+token infix:sym<=>  { <sym> <O('%assign, :pasttype<bind>')> }
+
+token infix:sym<$>  { <sym> <O('%applicative-low')> }
 
 token begin_function {
     <?>
