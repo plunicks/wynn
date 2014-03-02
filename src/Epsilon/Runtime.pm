@@ -9,7 +9,7 @@ sub &postfix:<!> ($expr) {
 sub &prefix:<+> ($expr) { +$expr }
 
 sub &prefix:<-> ($expr) {
-    pir::neg($expr);
+    pir::neg(+$expr);
 }
 
 sub &infix:<@> ($left, $right) {
@@ -30,11 +30,11 @@ sub &infix:</> ($left, $right) {
 }
 
 sub &infix:<+> ($left, $right) {
-    pir::add($left, $right);
+    pir::add(+$left, +$right);
 }
 
 sub &infix:<-> ($left, $right) {
-    pir::sub($left, $right);
+    pir::sub(+$left, +$right);
 }
 
 sub &infix:<~> ($left, $right) {
