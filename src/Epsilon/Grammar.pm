@@ -36,12 +36,12 @@ rule expression {
 ## Operators
 
 INIT {
-    Epsilon::Grammar.O(':prec<z>, :assoc<unary>', '%postcircumfix');
-    Epsilon::Grammar.O(':prec<z>, :assoc<unary>', '%unary-applicative');
-    Epsilon::Grammar.O(':prec<y>, :assoc<unary>', '%unary-negative');
-    Epsilon::Grammar.O(':prec<w>, :assoc<left>',  '%applicative');
-    Epsilon::Grammar.O(':prec<u>, :assoc<left>',  '%multiplicative');
-    Epsilon::Grammar.O(':prec<t>, :assoc<left>',  '%additive');
+    Epsilon::Grammar.O(':prec<o>, :assoc<unary>', '%postcircumfix');
+    Epsilon::Grammar.O(':prec<o>, :assoc<unary>', '%unary-applicative');
+    Epsilon::Grammar.O(':prec<n>, :assoc<unary>', '%unary-negative');
+    Epsilon::Grammar.O(':prec<m>, :assoc<left>',  '%applicative');
+    Epsilon::Grammar.O(':prec<k>, :assoc<left>',  '%multiplicative');
+    Epsilon::Grammar.O(':prec<j>, :assoc<left>',  '%additive');
     Epsilon::Grammar.O(':prec<f>, :assoc<list>',  '%list');
     Epsilon::Grammar.O(':prec<e>, :assoc<right>', '%cons');
     Epsilon::Grammar.O(':prec<b>, :assoc<right>', '%assign');
