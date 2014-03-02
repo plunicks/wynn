@@ -18,10 +18,13 @@ token begin_TOP {
 
 ## Lexer items
 
-# This <ws> rule treats # as "comment to eol".
+# This <ws> rule treats // as "comment to eol" and /* .. */ as a (potentially)
+# multi-line comment.
 token ws {
     <!ww>
-    [ '#' \N* \n? | \s+ ]*
+    [ '/*' .*? '*/'
+    | '//' \N* \n?
+    | \s+ ]*
 }
 
 ## Expressions
