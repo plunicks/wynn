@@ -108,7 +108,7 @@ token begin_block {
 ## Terms
 
 token identifier {
-    $<identifier>=[ <ident> [ <ident> | <[\'\-]> ]* ]
+    $<identifier>=[ <ident> ** <[\'\-]>* <[\']>* ]
 }
 
 token term:sym<parameter> {
