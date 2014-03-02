@@ -15,14 +15,15 @@ method begin_TOP($/) {
 }
 
 method expression($/) {
-    if $<function> {
-        make $<function>.ast;
-    } else {
-        make $<EXPR>.ast;
-    }
+    make $<EXPR>.ast;
 }
 
-method function($/) {
+method postcircumfix:sym<[ ]>($/) {
+    make PAST::Op.new($<expression>.ast, :pasttype<call>,
+                      :name('&postcircumfix:<[ ]>'), :node($/));
+}
+
+method infix:sym«->»($/) {
     our @?BLOCK;
     our $?BLOCK;
     my $past := $?BLOCK;
@@ -30,14 +31,6 @@ method function($/) {
     @?BLOCK.shift;
     $?BLOCK := @?BLOCK[0];
 
-    for $<identifier> {
-        my $param := $_.ast;
-        $param.scope('parameter');
-        $past.push($param);
-        $past.symbol($param.name, :scope<lexical>);
-    }
-
-    $past.push($<expression>.ast);
     make $past;
 }
 
@@ -47,7 +40,39 @@ method begin_function($/) {
     @?BLOCK.unshift($?BLOCK);
 }
 
+method circumfix:sym<( )>($/) { make $<expression>.ast; }
+
+method circumfix:sym<{ }>($/) {
+    our @?BLOCK;
+
+    my $past := @?BLOCK.shift;
+    our $?BLOCK := @?BLOCK[0];
+
+    $past.push($<expression>.ast);
+    make $past;
+}
+
+method begin_block($/) {
+    our @?BLOCK;
+    our $?BLOCK := PAST::Block.new(:blocktype<declaration>, :node($/));
+    @?BLOCK.unshift($?BLOCK);
+}
+
 method identifier($/) {
+    make ~$<identifier>;
+}
+
+method term:sym<parameter>($/) {
+    my $name := ~$<identifier>;
+
+    our $?BLOCK;
+    $?BLOCK.symbol($name, :scope<parameter>);
+
+    make PAST::Var.new(:name($name), :scope<parameter>,
+                       :viviself<Undef>, :node($/));
+}
+
+method term:sym<variable>($/) {
     my $name := ~$<identifier>;
 
     my $scope := 'lexical';
@@ -89,33 +114,6 @@ method identifier($/) {
 
     make PAST::Var.new(:name($name), :scope($scope), :isdecl($isdecl),
                        :viviself<Undef>, :node($/));
-}
-
-method postcircumfix:sym<[ ]>($/) {
-    make PAST::Op.new($<expression>.ast, :pasttype<call>,
-                      :name('&postcircumfix:<[ ]>'), :node($/));
-}
-
-method circumfix:sym<( )>($/) { make $<expression>.ast; }
-
-method circumfix:sym<{ }>($/) {
-    our @?BLOCK;
-
-    my $past := @?BLOCK.shift;
-    our $?BLOCK := @?BLOCK[0];
-
-    $past.push($<expression>.ast);
-    make $past;
-}
-
-method begin_block($/) {
-    our @?BLOCK;
-    our $?BLOCK := PAST::Block.new(:blocktype<declaration>, :node($/));
-    @?BLOCK.unshift($?BLOCK);
-}
-
-method term:sym<identifier>($/) {
-    make $<identifier>.ast;
 }
 
 method term:sym<nil>($/) {

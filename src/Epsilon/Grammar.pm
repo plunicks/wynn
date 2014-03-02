@@ -27,20 +27,7 @@ token ws {
 ## Expressions
 
 rule expression {
-    | <function>
-    | <EXPR>
-}
-
-rule function {
-    [ <identifier> ** ',' ]? '->' <.begin_function> <expression>
-}
-
-token begin_function {
-    <?>
-}
-
-token identifier {
-    $<identifier>=[ <ident> [ <ident> | <[\'\-]> ]* ]
+    <EXPR>
 }
 
 ## Operators
@@ -56,6 +43,7 @@ INIT {
     Epsilon::Grammar.O(':prec<e>, :assoc<right>', '%cons');
     Epsilon::Grammar.O(':prec<b>, :assoc<right>', '%assign');
     Epsilon::Grammar.O(':prec<a>, :assoc<right>', '%applicative-low');
+    Epsilon::Grammar.O(':prec<X>, :assoc<right>', '%function');
     Epsilon::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
 }
 
@@ -87,6 +75,15 @@ token infix:sym<=>  { <sym> <O('%assign, :pasttype<bind>')> }
 
 token infix:sym<$>  { <sym> <O('%applicative-low')> }
 
+token infix:sym«->» {
+    <sym> <.begin_function>
+    <O('%function')>
+}
+
+token begin_function {
+    <?>
+}
+
 token infix:sym<;>  { <sym> <O('%sequencing')> }
 
 token circumfix:sym<( )> { '(' <.ws> <expression> ')' }
@@ -104,8 +101,16 @@ token begin_block {
 
 ## Terms
 
-token term:sym<identifier> {
-    <identifier>
+token identifier {
+    $<identifier>=[ <ident> [ <ident> | <[\'\-]> ]* ]
+}
+
+token term:sym<parameter> {
+    <identifier> <?before <.ws> '->'>
+}
+
+token term:sym<variable> {
+    <identifier> <!before <.ws> '->'>
 }
 
 token term:sym<nil> { }
