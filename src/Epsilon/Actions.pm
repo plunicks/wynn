@@ -70,21 +70,25 @@ method begin_block($/) {
 }
 
 method identifier($/) {
-    make ~$<identifier>;
+    make PAST::Var.new(:name(~$<identifier>), :node($/));
 }
 
 method term:sym<parameter>($/) {
-    my $name := ~$<identifier>;
+    my $past := $<identifier>.ast;
+    my $name := $past.name;
 
     our $?BLOCK;
     $?BLOCK.symbol($name, :scope<parameter>);
 
-    make PAST::Var.new(:name($name), :scope<parameter>,
-                       :viviself<Undef>, :node($/));
+    $past.scope('parameter');
+    $past.viviself('Undef');
+
+    make $past;
 }
 
 method term:sym<variable>($/) {
-    my $name := ~$<identifier>;
+    my $past := $<identifier>.ast;
+    my $name := $past.name;
 
     my $scope := 'lexical';
     my $isdecl := 1;
@@ -123,8 +127,11 @@ method term:sym<variable>($/) {
         }
     }
 
-    make PAST::Var.new(:name($name), :scope($scope), :isdecl($isdecl),
-                       :viviself<Undef>, :node($/));
+    $past.scope($scope);
+    $past.isdecl($isdecl);
+    $past.viviself('Undef');
+
+    make $past;
 }
 
 method term:sym<nil>($/) {
