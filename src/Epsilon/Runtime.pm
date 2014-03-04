@@ -55,6 +55,10 @@ sub &infix:«>>»($left, $right) {
     $right.unshift($left);
 }
 
+sub &infix:«<<»($left, $right) {
+    $left.push($right);
+}
+
 sub &infix:<$> ($left, $right) {
   Q:PIR {
       $P0 = find_lex "$left"
