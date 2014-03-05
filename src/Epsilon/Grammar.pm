@@ -159,9 +159,10 @@ rule term:sym<function_call> {
 
 token term:sym<void> { '()' }
 
-token term:sym<integer> { <integer> <!before '.'> }
+token sign { '+' | '-' }
+token term:sym<integer> { <sign>? <integer> <!before '.'> }
 token term:sym<float> {
-    [ \d+ '.' \d* | \d* '.' \d+ ]
+    <sign>? [ \d+ '.' \d* | \d* '.' \d+ ]
 }
 token term:sym<quote> { <quote> }
 

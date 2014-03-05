@@ -173,7 +173,7 @@ method term:sym<void>($/) {
     make PAST::Val.new(:returns<Void>, :value(), :node($/));
 }
 
-method term:sym<integer>($/) { make $<integer>.ast; }
+method term:sym<integer>($/) { make +$/; }
 method term:sym<float>($/) { make +$/; }
 method term:sym<quote>($/) { make $<quote>.ast; }
 
