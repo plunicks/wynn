@@ -66,7 +66,6 @@ token postcircumfix:sym<[ ]> {
 
 token postfix:sym<!> { <sym> <O('%unary-applicative')> }
 
-# these are only optimizations - void makes them redundant
 token prefix:sym<+> { <sym> <O('%unary-negative')> }
 token prefix:sym<-> { <sym> <O('%unary-negative')> }
 
@@ -146,7 +145,18 @@ token term:sym<variable> {
     <identifier> <!before <.ws> '->'>
 }
 
-token term:sym<void> { }
+# Any operator symbol that serves as both a unary and a binary operator cannot
+# immediately follow the function name identifier in a function call without
+# parsing ambiguity. This excludes «+», «-», and «->»
+rule function_call {
+    <identifier> <!before <.ws> <[+\-]>> <EXPR>+
+}
+
+rule term:sym<function_call> {
+    <function_call>
+}
+
+token term:sym<void> { '()' }
 
 token term:sym<integer> { <integer> }
 token term:sym<quote> { <quote> }

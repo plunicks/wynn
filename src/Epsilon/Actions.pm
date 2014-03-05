@@ -142,6 +142,20 @@ method term:sym<variable>($/) {
     make $past;
 }
 
+method function_call($/) {
+    my $past := $<identifier>.ast;
+
+    for $<EXPR> {
+        $past := PAST::Op.new($past, $_.ast, :pasttype<call>, :node($/));
+    }
+
+    make $past;
+}
+
+method term:sym<function_call>($/) {
+    make $<function_call>.ast;
+}
+
 method term:sym<void>($/) {
     make PAST::Val.new(:returns<Void>, :value(), :node($/));
 }
