@@ -60,7 +60,7 @@ INIT {
 }
 
 token postcircumfix:sym<[ ]> {
-    '[' <expression> ']'
+    '[' <expression> [ ']' || <.panic: "Expected ']'"> ]
     <O('%postcircumfix')>
 }
 
@@ -113,13 +113,15 @@ token begin_function {
 
 token infix:sym<;>  { <sym> <O('%sequencing')> }
 
-token circumfix:sym<( )> { '(' <.ws> <expression> ')' }
+token circumfix:sym<( )> {
+    '(' <.ws> <expression> [ ')' || <.panic: "Expected ')'"> ]
+}
 
 token circumfix:sym<{ }> {
     '{'
         <.begin_block>
         <.ws> <expression>
-    '}'
+    [ '}' || <.panic: "Expected '}'"> ]
 }
 
 token begin_block {
@@ -134,7 +136,7 @@ token identifier {
 }
 
 token quoted_identifier {
-    '«' $<identifier>=[\N*?] '»'
+    '«' $<identifier>=[\N*?] [ '»' || <.panic: "Expected '»'"> ]
 }
 
 token term:sym<parameter> {
