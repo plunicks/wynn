@@ -44,6 +44,7 @@ INIT {
     Epsilon::Grammar.O(':prec<o>, :assoc<unary>', '%postcircumfix');
     Epsilon::Grammar.O(':prec<o>, :assoc<unary>', '%unary-applicative');
     Epsilon::Grammar.O(':prec<n>, :assoc<unary>', '%unary-negative');
+    Epsilon::Grammar.O(':prec<n>, :assoc<unary>', '%unary-not');
     Epsilon::Grammar.O(':prec<m>, :assoc<left>',  '%applicative');
     Epsilon::Grammar.O(':prec<k>, :assoc<left>',  '%multiplicative');
     Epsilon::Grammar.O(':prec<j>, :assoc<left>',  '%additive');
@@ -68,6 +69,8 @@ token postfix:sym<!> { <sym> <O('%unary-applicative')> }
 # these are only optimizations - void makes them redundant
 token prefix:sym<+> { <sym> <O('%unary-negative')> }
 token prefix:sym<-> { <sym> <O('%unary-negative')> }
+
+token prefix:sym<¬> { <sym> <O('%unary-not')> }
 
 token infix:sym<@>  { <sym> <O('%applicative')> }
 

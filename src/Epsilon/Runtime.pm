@@ -12,6 +12,10 @@ sub &prefix:<-> ($expr) {
     pir::neg(+$expr);
 }
 
+sub &prefix:<¬> ($expr) {
+    pir::isfalse($expr);
+}
+
 sub &infix:<@> ($left, $right) {
   Q:PIR {
       $P0 = find_lex "$left"
