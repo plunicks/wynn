@@ -145,6 +145,16 @@ method term:sym<variable>($/) {
     make $past;
 }
 
+method function_identifier($/) {
+    my $past := $<identifier>.ast;
+
+    if is_global($past.name) {
+        $past.scope('package');
+    }
+
+    make $past;
+}
+
 method function_call($/) {
     my $past := $<identifier>.ast;
 
