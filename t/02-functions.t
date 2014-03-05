@@ -1,5 +1,5 @@
 start = (x -> y -> print @ (x ~ ".." ~ y ~ "\n"));
-start @ 1 @ 6;
+start @ 1 @ 8;
 
 foo = (-> print @ "ok 1\n"); foo!;
 
@@ -16,4 +16,7 @@ bar = x -> y -> z -> {
     ok $ x + y - z
 };
 
-bar @ 3 @ 4 @ 1
+bar @ 3 @ 4 @ 1;
+
+bar 3 4 0;
+ok 8
