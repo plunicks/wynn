@@ -65,7 +65,7 @@ token postcircumfix:sym<[ ]> {
 
 token postfix:sym<!> { <sym> <O('%unary-applicative')> }
 
-# these are only optimizations - nil makes them redundant
+# these are only optimizations - void makes them redundant
 token prefix:sym<+> { <sym> <O('%unary-negative')> }
 token prefix:sym<-> { <sym> <O('%unary-negative')> }
 
@@ -143,7 +143,7 @@ token term:sym<variable> {
     <identifier> <!before <.ws> '->'>
 }
 
-token term:sym<nil> { }
+token term:sym<void> { }
 
 token term:sym<integer> { <integer> }
 token term:sym<quote> { <quote> }

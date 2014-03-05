@@ -55,7 +55,7 @@ No Configure step, no Makefile generated.
     $P0['dynops'] = $P1
 
     $P2 = new 'Hash'
-    $P3 = split ' ', 'src/pmc/epsilon.pmc'
+    $P3 = split ' ', 'src/pmc/epsilon.pmc src/pmc/void.pmc'
     $P2['epsilon_group'] = $P3
     $P0['dynpmc'] = $P2
 

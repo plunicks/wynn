@@ -142,8 +142,8 @@ method term:sym<variable>($/) {
     make $past;
 }
 
-method term:sym<nil>($/) {
-    make PAST::Val.new(:returns<ResizablePMCArray>, :value(), :node($/));
+method term:sym<void>($/) {
+    make PAST::Val.new(:returns<Void>, :value(), :node($/));
 }
 
 method term:sym<integer>($/) { make $<integer>.ast; }

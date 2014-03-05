@@ -1,0 +1,314 @@
+/*
+
+=head1 NAME
+
+src/pmc/void.pmc - A void value
+
+=head1 DESCRIPTION
+
+This is Epsilon's void type. Void is considered an identity for associative
+arithmetic operators. For example, any number plus void is the number itself
+and any number multiplied by void is the same number. Under cons operators,
+void evaluates to an empty array and for list-joining operators void is
+nothing, such that, for example, '(1, 2, 3,)' is the same as '(1, 2, 3)'
+and '(,)' is an empty list.
+
+Void has a boolean value of false and if coerced into a string, it is the
+empty string. However, void is not directly convertible into a numeric type
+because its numeric value would depend on the operation in which it is used.
+
+Void does not change its type or value when a value is assigned to it.
+
+=head2 Methods
+
+=over 4
+
+=cut
+
+*/
+
+pmclass Void
+    group epsilon_group
+    auto_attrs
+    no_ro
+    dynpmc
+    {
+
+/*
+
+=item C<void set_pmc(PMC *other)>
+
+Does nothing.
+
+=cut
+
+*/
+
+    VTABLE void set_pmc(PMC *other) {
+    }
+
+/*
+
+=item C<void assign_pmc(PMC *other)>
+
+Does nothing.
+
+=cut
+
+*/
+
+    VTABLE void assign_pmc(PMC *other) {
+    }
+
+/*
+
+=item C<INTVAL defined()>
+
+Returns 0.
+
+=cut
+
+*/
+
+    VTABLE INTVAL defined() {
+        UNUSED(SELF)
+        UNUSED(INTERP)
+        return 0;
+    }
+
+/*
+
+=item C<void set_integer_native(INTVAL value)>
+
+Does nothing.
+
+=cut
+
+*/
+
+    VTABLE void set_integer_native(INTVAL value) {
+    }
+
+/*
+
+=item C<void set_number_native(FLOATVAL value)>
+
+Does nothing.
+
+=cut
+
+*/
+
+    VTABLE void set_number_native(FLOATVAL value) {
+    }
+
+/*
+
+=item C<STRING *get_string()>
+
+Returns an empty string.
+
+=cut
+
+*/
+
+    VTABLE STRING *get_string() {
+        UNUSED(SELF)
+        Parrot_warn(INTERP, PARROT_WARNINGS_UNDEF_FLAG,
+            "Stringifying a Void PMC");
+
+        return CONST_STRING(INTERP, "");
+    }
+
+/*
+
+=item C<void set_string_native(STRING *value)>
+
+Does nothing.
+
+=cut
+
+*/
+
+    VTABLE void set_string_native(STRING *value) {
+    }
+
+/*
+
+=item C<INTVAL get_bool()>
+
+Returns 0.
+
+=cut
+
+*/
+
+    VTABLE INTVAL get_bool() {
+        UNUSED(SELF)
+        UNUSED(INTERP)
+        return 0;
+    }
+
+/*
+
+=item C<void share()>
+
+Sets this PMC as shared and read-only.
+
+=cut
+
+*/
+
+    VTABLE void share() {
+        SUPER();
+    }
+
+/*
+
+=item C<PMC *clone()>
+
+Clones the current Void PMC.
+
+=cut
+
+*/
+
+    VTABLE PMC *clone() {
+        return Parrot_pmc_new(INTERP, SELF->vtable->base_type);
+    }
+
+/*
+
+=item C<INTVAL is_equal(PMC *value)>
+
+Returns 1 if the C<*value> is an Void PMC, 0 otherwise.
+
+=cut
+
+*/
+
+
+    MULTI INTVAL is_equal(Void value) {
+        UNUSED(SELF)
+        UNUSED(INTERP)
+        UNUSED(value)
+        return 1;
+    }
+
+    MULTI INTVAL is_equal(DEFAULT value) {
+        UNUSED(SELF)
+        UNUSED(INTERP)
+        UNUSED(value)
+        return 0;
+    }
+
+    MULTI PMC *add(DEFAULT value, PMC *dest) {
+        UNUSED(SELF)
+        dest = Parrot_pmc_new(INTERP, VTABLE_type(INTERP, value));
+        VTABLE_set_pmc(INTERP, dest, value);
+        return dest;
+    }
+
+    VTABLE PMC *add_int(INTVAL value, PMC *dest) {
+        UNUSED(SELF)
+        dest = Parrot_pmc_new(INTERP, enum_class_Integer);
+        VTABLE_set_integer_native(INTERP, dest, value);
+        return dest;
+    }
+
+    VTABLE PMC *add_float(FLOATVAL value, PMC *dest) {
+        UNUSED(SELF)
+        dest = Parrot_pmc_new(INTERP, enum_class_Float);
+        VTABLE_set_number_native(INTERP, dest, value);
+        return dest;
+    }
+
+    MULTI PMC *multiply(DEFAULT value, PMC *dest) {
+        UNUSED(SELF)
+        dest = Parrot_pmc_new(INTERP, VTABLE_type(INTERP, value));
+        VTABLE_set_pmc(INTERP, dest, value);
+        return dest;
+    }
+
+    VTABLE PMC *multiply_int(INTVAL value, PMC *dest) {
+        UNUSED(SELF)
+        dest = Parrot_pmc_new(INTERP, enum_class_Integer);
+        VTABLE_set_integer_native(INTERP, dest, value);
+        return dest;
+    }
+
+    VTABLE PMC *multiply_float(FLOATVAL value, PMC *dest) {
+        UNUSED(SELF)
+        dest = Parrot_pmc_new(INTERP, enum_class_Float);
+        VTABLE_set_number_native(INTERP, dest, value);
+        return dest;
+    }
+
+    MULTI PMC *subtract(DEFAULT value, PMC *dest) {
+        UNUSED(value)
+        dest = Parrot_pmc_new(INTERP, VTABLE_type(INTERP, SELF));
+        return dest;
+    }
+
+    VTABLE PMC *subtract_int(INTVAL value, PMC *dest) {
+        UNUSED(value)
+        dest = Parrot_pmc_new(INTERP, VTABLE_type(INTERP, SELF));
+        return dest;
+    }
+
+    VTABLE PMC *subtract_float(FLOATVAL value, PMC *dest) {
+        UNUSED(value)
+        dest = Parrot_pmc_new(INTERP, VTABLE_type(INTERP, SELF));
+        return dest;
+    }
+
+    MULTI PMC *divide(DEFAULT value, PMC *dest) {
+        UNUSED(value)
+        dest = Parrot_pmc_new(INTERP, VTABLE_type(INTERP, SELF));
+        return dest;
+    }
+
+    VTABLE PMC *divide_int(INTVAL value, PMC *dest) {
+        UNUSED(value)
+        dest = Parrot_pmc_new(INTERP, VTABLE_type(INTERP, SELF));
+        return dest;
+    }
+
+    VTABLE PMC *divide_float(FLOATVAL value, PMC *dest) {
+        UNUSED(value)
+        dest = Parrot_pmc_new(INTERP, VTABLE_type(INTERP, SELF));
+        return dest;
+    }
+
+    VTABLE PMC *concatenate(PMC *value, PMC *dest) {
+        UNUSED(SELF)
+        dest = Parrot_pmc_new(INTERP, enum_class_String);
+
+        VTABLE_set_string_native(INTERP, dest,
+                VTABLE_get_string(INTERP, value));
+        return dest;
+    }
+
+    VTABLE PMC *concatenate_str(STRING *value, PMC *dest) {
+        UNUSED(SELF)
+        dest = Parrot_pmc_new(INTERP, enum_class_String);
+
+        VTABLE_set_string_native(INTERP, dest, value);
+        return dest;
+    }
+}
+
+/*
+
+=back
+
+=cut
+
+*/
+
+/*
+ * Local variables:
+ *   c-file-style: "parrot"
+ * End:
+ * vim: expandtab shiftwidth=4 cinoptions='\:2=2' :
+ */
