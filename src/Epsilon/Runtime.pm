@@ -124,6 +124,7 @@ sub &postcircumfix:<[ ]> ($left, $right) {
 
 sub print ($arg) {
     pir::print($arg);
+    1;
 }
 
 sub return ($arg) { $arg }
