@@ -158,7 +158,7 @@ method function_identifier($/) {
 method function_call($/) {
     my $past := $<identifier>.ast;
 
-    for $<EXPR> {
+    for $<term> {
         $past := PAST::Op.new($past, $_.ast, :pasttype<call>, :node($/));
     }
 

@@ -149,11 +149,8 @@ token function_identifier {
     <identifier>
 }
 
-# Any operator symbol that serves as both a unary and a binary operator cannot
-# immediately follow the function name identifier in a function call without
-# parsing ambiguity. This excludes «+», «-», and «->»
 rule function_call {
-    $<identifier>=<function_identifier> <!before <.ws> <[+\-]>> <EXPR>+
+    $<identifier>=<function_identifier> [ <term> <.ws> ]+
 }
 
 rule term:sym<function_call> {
