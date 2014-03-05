@@ -94,16 +94,8 @@ method term:sym<parameter>($/) {
     make $past;
 }
 
-method term:sym<variable>($/) {
-    my $past := $<identifier>.ast;
-    my $name := $past.name;
-
-    my $scope := 'lexical';
-    my $isdecl := 1;
-    our @?BLOCK;
-
-    # Search for a global and use it, if it exists.
-    my $global := 0;
+sub is_global ($name) {
+    my $is_global := 0;
 
     # kludge - store_lex requires a PMC:
     my $true := 1;
@@ -115,11 +107,22 @@ method term:sym<variable>($/) {
 
       if_null $P1, end_global_test
       $P2 = find_lex "$true"
-      store_lex "$global", $P2
+      store_lex "$is_global", $P2
     end_global_test:
   };
 
-    if $global {
+    return $is_global;
+}
+
+method term:sym<variable>($/) {
+    my $past := $<identifier>.ast;
+    my $name := $past.name;
+
+    my $scope := 'lexical';
+    my $isdecl := 1;
+    our @?BLOCK;
+
+    if is_global($name) {
         $scope := 'package';
         $isdecl := 0;
     } else {
