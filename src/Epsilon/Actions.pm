@@ -174,6 +174,7 @@ method term:sym<void>($/) {
 }
 
 method term:sym<integer>($/) { make $<integer>.ast; }
+method term:sym<float>($/) { make +$/; }
 method term:sym<quote>($/) { make $<quote>.ast; }
 
 method quote:sym<'>($/) { make $<quote_EXPR>.ast; }

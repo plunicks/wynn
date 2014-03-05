@@ -162,7 +162,10 @@ rule term:sym<function_call> {
 
 token term:sym<void> { '()' }
 
-token term:sym<integer> { <integer> }
+token term:sym<integer> { <integer> <!before '.'> }
+token term:sym<float> {
+    [ \d+ '.' \d* | \d* '.' \d+ ]
+}
 token term:sym<quote> { <quote> }
 
 proto token quote { <...> }
