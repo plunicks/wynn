@@ -132,3 +132,27 @@ sub print ($arg) {
 }
 
 sub return ($arg) { $arg }
+
+# function -> list -> list
+sub map ($func) {
+    return sub ($list) {
+        my @result := ();
+        for $list {
+            @result.push($func($_));
+        }
+        return @result;
+    }
+}
+
+# function -> list -> list
+sub grep ($func) {
+    return sub ($list) {
+        my @result := ();
+        for $list {
+            if $func($_) {
+                @result.push($_);
+            }
+        }
+        return @result;
+    }
+}
