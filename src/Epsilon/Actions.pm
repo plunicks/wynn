@@ -181,8 +181,12 @@ method factor:sym<void>($/) {
     make PAST::Val.new(:returns<Void>, :value(), :node($/));
 }
 
-method factor:sym<integer>($/) { make +$/; }
-method factor:sym<float>($/) { make +$/; }
+method factor:sym<integer>($/) {
+    make PAST::Val.new(:value(+$/), :returns<Integer>, :node($/));
+}
+method factor:sym<float>($/) {
+    make PAST::Val.new(:value(+$/), :returns<Float>, :node($/));
+}
 method factor:sym<quote>($/) { make $<quote>.ast; }
 
 method quote:sym<'>($/) { make $<quote_EXPR>.ast; }

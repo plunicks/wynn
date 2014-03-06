@@ -52,6 +52,8 @@ INIT {
     Epsilon::Grammar.O(':prec<S>, :assoc<list>',  '%list');
     Epsilon::Grammar.O(':prec<R>, :assoc<right>', '%cons');
     Epsilon::Grammar.O(':prec<R>, :assoc<left>',  '%cons-left');
+    Epsilon::Grammar.O(':prec<P>, :assoc<left>',  '%conjunctive');
+    Epsilon::Grammar.O(':prec<O>, :assoc<left>',  '%disjunctive');
     Epsilon::Grammar.O(':prec<M>, :assoc<right>', '%applicative-low');
     Epsilon::Grammar.O(':prec<I>, :assoc<unary>', '%unary-function');
     Epsilon::Grammar.O(':prec<I>, :assoc<right>', '%function');
@@ -92,6 +94,10 @@ token infix:sym<,>  { <sym> <O('%list')> }
 token infix:sym«>>» { <sym> <O('%cons')> }
 
 token infix:sym«<<» { <sym> <O('%cons-left')> }
+
+token infix:sym<&&> { <sym> <O('%conjunctive, :pasttype<if>')> }
+
+token infix:sym<||> { <sym> <O('%disjunctive, :pasttype<unless>')> }
 
 token infix:sym<$>  { <sym> <O('%applicative-low')> }
 
