@@ -46,16 +46,16 @@ INIT {
     Epsilon::Grammar.O(':prec<n>, :assoc<unary>', '%unary-negative');
     Epsilon::Grammar.O(':prec<n>, :assoc<unary>', '%unary-not');
     Epsilon::Grammar.O(':prec<m>, :assoc<left>',  '%applicative');
-    Epsilon::Grammar.O(':prec<k>, :assoc<left>',  '%multiplicative');
-    Epsilon::Grammar.O(':prec<j>, :assoc<left>',  '%additive');
-    Epsilon::Grammar.O(':prec<h>, :assoc<left>',  '%comparative');
-    Epsilon::Grammar.O(':prec<f>, :assoc<list>',  '%list');
-    Epsilon::Grammar.O(':prec<e>, :assoc<right>', '%cons');
-    Epsilon::Grammar.O(':prec<e>, :assoc<left>',  '%cons-left');
-    Epsilon::Grammar.O(':prec<c>, :assoc<right>', '%applicative-low');
-    Epsilon::Grammar.O(':prec<b>, :assoc<unary>', '%unary-function');
-    Epsilon::Grammar.O(':prec<b>, :assoc<right>', '%function');
-    Epsilon::Grammar.O(':prec<a>, :assoc<right>', '%assign');
+    Epsilon::Grammar.O(':prec<e>, :assoc<left>',  '%multiplicative');
+    Epsilon::Grammar.O(':prec<d>, :assoc<left>',  '%additive');
+    Epsilon::Grammar.O(':prec<a>, :assoc<left>',  '%comparative');
+    Epsilon::Grammar.O(':prec<S>, :assoc<list>',  '%list');
+    Epsilon::Grammar.O(':prec<R>, :assoc<right>', '%cons');
+    Epsilon::Grammar.O(':prec<R>, :assoc<left>',  '%cons-left');
+    Epsilon::Grammar.O(':prec<M>, :assoc<right>', '%applicative-low');
+    Epsilon::Grammar.O(':prec<I>, :assoc<unary>', '%unary-function');
+    Epsilon::Grammar.O(':prec<I>, :assoc<right>', '%function');
+    Epsilon::Grammar.O(':prec<F>, :assoc<right>', '%assign');
     Epsilon::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
 }
 
