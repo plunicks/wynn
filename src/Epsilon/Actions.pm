@@ -51,9 +51,41 @@ method begin_function($/) {
     @?BLOCK.unshift($?BLOCK);
 }
 
-method circumfix:sym<( )>($/) { make $<expression>.ast; }
+## Terms
 
-method circumfix:sym<{ }>($/) {
+method function_identifier($/) {
+    my $past := $<identifier>.ast;
+
+    if is_global($past.name) {
+        $past.scope('package');
+    }
+
+    make $past;
+}
+
+method function_call($/) {
+    my $past := $<identifier>.ast;
+
+    for $<factor> {
+        $past := PAST::Op.new($past, $_.ast, :pasttype<call>, :node($/));
+    }
+
+    make $past;
+}
+
+method term:sym<function_call>($/) {
+    make $<function_call>.ast;
+}
+
+method term:sym<factor>($/) {
+    make $<factor>.ast;
+}
+
+## Factors
+
+method factor:sym<( )>($/) { make $<expression>.ast; }
+
+method factor:sym<{ }>($/) {
     our @?BLOCK;
 
     my $past := @?BLOCK.shift;
@@ -81,7 +113,7 @@ method quoted_identifier($/) {
     make PAST::Var.new(:name(~$<identifier>), :node($/));
 }
 
-method term:sym<parameter>($/) {
+method factor:sym<parameter>($/) {
     my $past := $<identifier>.ast;
     my $name := $past.name;
 
@@ -114,7 +146,7 @@ sub is_global ($name) {
     return $is_global;
 }
 
-method term:sym<variable>($/) {
+method factor:sym<variable>($/) {
     my $past := $<identifier>.ast;
     my $name := $past.name;
 
@@ -145,37 +177,13 @@ method term:sym<variable>($/) {
     make $past;
 }
 
-method function_identifier($/) {
-    my $past := $<identifier>.ast;
-
-    if is_global($past.name) {
-        $past.scope('package');
-    }
-
-    make $past;
-}
-
-method function_call($/) {
-    my $past := $<identifier>.ast;
-
-    for $<term> {
-        $past := PAST::Op.new($past, $_.ast, :pasttype<call>, :node($/));
-    }
-
-    make $past;
-}
-
-method term:sym<function_call>($/) {
-    make $<function_call>.ast;
-}
-
-method term:sym<void>($/) {
+method factor:sym<void>($/) {
     make PAST::Val.new(:returns<Void>, :value(), :node($/));
 }
 
-method term:sym<integer>($/) { make +$/; }
-method term:sym<float>($/) { make +$/; }
-method term:sym<quote>($/) { make $<quote>.ast; }
+method factor:sym<integer>($/) { make +$/; }
+method factor:sym<float>($/) { make +$/; }
+method factor:sym<quote>($/) { make $<quote>.ast; }
 
 method quote:sym<'>($/) { make $<quote_EXPR>.ast; }
 method quote:sym<">($/) { make $<quote_EXPR>.ast; }

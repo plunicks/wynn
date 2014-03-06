@@ -113,11 +113,33 @@ token begin_function {
 
 token infix:sym<;>  { <sym> <O('%sequencing')> }
 
-token circumfix:sym<( )> {
+## Terms
+
+token function_identifier {
+    <identifier>
+}
+
+rule function_call {
+    $<identifier>=<function_identifier> [ <factor> <.ws> ]+
+}
+
+rule term:sym<function_call> {
+    <function_call>
+}
+
+rule term:sym<factor> {
+    <factor>
+}
+
+## Factors
+
+proto token factor { <...> }
+
+token factor:sym<( )> {
     '(' <.ws> <expression> [ ')' || <.panic: "Expected ')'"> ]
 }
 
-token circumfix:sym<{ }> {
+token factor:sym<{ }> {
     '{'
         <.begin_block>
         <.ws> <expression>
@@ -128,8 +150,6 @@ token begin_block {
     <?>
 }
 
-## Terms
-
 token identifier {
     | <quoted_identifier>
     | $<identifier>=[ <ident> ** <[\'\-]>* <[\']>* ]
@@ -139,34 +159,22 @@ token quoted_identifier {
     '«' $<identifier>=[\N*?] [ '»' || <.panic: "Expected '»'"> ]
 }
 
-token term:sym<parameter> {
+token factor:sym<parameter> {
     <identifier> <?before <.ws> '->'>
 }
 
-token term:sym<variable> {
+token factor:sym<variable> {
     <identifier> <!before <.ws> '->'>
 }
 
-token function_identifier {
-    <identifier>
-}
-
-rule function_call {
-    $<identifier>=<function_identifier> [ <term> <.ws> ]+
-}
-
-rule term:sym<function_call> {
-    <function_call>
-}
-
-token term:sym<void> { '()' }
+token factor:sym<void> { '()' }
 
 token sign { '+' | '-' }
-token term:sym<integer> { <sign>? <integer> <!before '.'> }
-token term:sym<float> {
+token factor:sym<integer> { <sign>? <integer> <!before '.'> }
+token factor:sym<float> {
     <sign>? [ \d+ '.' \d* | \d* '.' \d+ ]
 }
-token term:sym<quote> { <quote> }
+token factor:sym<quote> { <quote> }
 
 proto token quote { <...> }
 token quote:sym<'> { <?[']> <quote_EXPR: ':q'> }
