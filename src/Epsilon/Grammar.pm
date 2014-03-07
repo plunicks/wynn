@@ -124,12 +124,12 @@ token infix:sym<;>  { <sym> <O('%sequencing')> }
 
 ## Terms
 
-token function_identifier {
-    <identifier>
+token function_variable {
+    <variable>
 }
 
 rule function_call {
-    $<identifier>=<function_identifier> [ <factor> <.ws> ]+
+    $<variable>=<function_variable> [ <factor> <.ws> ]+
 }
 
 rule term:sym<function_call> {
@@ -160,20 +160,23 @@ token begin_block {
 }
 
 token identifier {
-    | <quoted_identifier>
-    | $<identifier>=[ <ident> ** <[\'\-]>* <[\']>* ]
+    $<identifier>=[ <quoted_identifier> | <ident> ** <[\'\-]>* <[\']>* ]
 }
 
 token quoted_identifier {
     '«' $<identifier>=<-[\n»]>* [ '»' || <.panic: "Expected '»'"> ]
 }
 
+token variable {
+    <identifier>
+}
+
 token factor:sym<parameter> {
-    <identifier> <?before <.ws> '->'>
+    <variable> <?before <.ws> '->'>
 }
 
 token factor:sym<variable> {
-    <identifier> <!before <.ws> '->'>
+    <variable> <!before <.ws> '->'>
 }
 
 token factor:sym<void> { '()' }

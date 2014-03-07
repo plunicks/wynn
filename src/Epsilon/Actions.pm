@@ -53,8 +53,8 @@ method begin_function($/) {
 
 ## Terms
 
-method function_identifier($/) {
-    my $past := $<identifier>.ast;
+method function_variable($/) {
+    my $past := $<variable>.ast;
 
     if is_global($past.name) {
         $past.scope('package');
@@ -64,7 +64,7 @@ method function_identifier($/) {
 }
 
 method function_call($/) {
-    my $past := $<identifier>.ast;
+    my $past := $<variable>.ast;
 
     for $<factor> {
         $past := PAST::Op.new($past, $_.ast, :pasttype<call>, :node($/));
@@ -102,19 +102,19 @@ method begin_block($/) {
 }
 
 method identifier($/) {
-    if $<quoted_identifier> {
-        make $<quoted_identifier>.ast;
-    } else {
-        make PAST::Var.new(:name(~$<identifier>), :node($/));
-    }
+    make ~$<identifier>
 }
 
 method quoted_identifier($/) {
+    make ~$<identifier>;
+}
+
+method variable($/) {
     make PAST::Var.new(:name(~$<identifier>), :node($/));
 }
 
 method factor:sym<parameter>($/) {
-    my $past := $<identifier>.ast;
+    my $past := $<variable>.ast;
     my $name := $past.name;
 
     our $?BLOCK;
@@ -147,7 +147,7 @@ sub is_global ($name) {
 }
 
 method factor:sym<variable>($/) {
-    my $past := $<identifier>.ast;
+    my $past := $<variable>.ast;
     my $name := $past.name;
 
     my $scope := 'lexical';
