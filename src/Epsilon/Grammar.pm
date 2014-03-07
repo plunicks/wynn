@@ -165,7 +165,7 @@ token identifier {
 }
 
 token quoted_identifier {
-    '«' $<identifier>=[\N*?] [ '»' || <.panic: "Expected '»'"> ]
+    '«' $<identifier>=<-[\n»]>* [ '»' || <.panic: "Expected '»'"> ]
 }
 
 token factor:sym<parameter> {
