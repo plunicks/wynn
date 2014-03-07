@@ -143,6 +143,15 @@ sub load ($module) {
   }
 }
 
+sub dump ($arg) {
+  Q:PIR {
+      $P0 = find_lex "$arg"
+      load_bytecode 'dumper.pbc'
+      $P1 = get_root_global ['parrot'], '_dumper'
+      $P1($P0)
+  }
+}
+
 # function -> list -> list
 sub map ($func) {
     return sub ($list) {
