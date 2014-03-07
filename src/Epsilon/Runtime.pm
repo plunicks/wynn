@@ -133,6 +133,16 @@ sub print ($arg) {
 
 sub return ($arg) { $arg }
 
+sub load ($module) {
+  Q:PIR {
+      .local pmc module, compiler, result
+      module = find_lex "$module"
+      compiler = compreg 'Epsilon'
+      result = compiler.'load_library'(module)
+      .return(result)
+  }
+}
+
 # function -> list -> list
 sub map ($func) {
     return sub ($list) {
