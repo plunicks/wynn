@@ -1,4 +1,4 @@
-installable_epsilon: src/Epsilon/Compiler.pm src/Epsilon/Actions.pm src/Epsilon/Grammar.pm src/Epsilon/Runtime.pm src/pmc/void.pmc
+installable_epsilon: epsilon.pir src/epsilon.pir src/Epsilon/Compiler.pm src/Epsilon/Actions.pm src/Epsilon/Grammar.pm src/Epsilon/Runtime.pm src/pmc/void.pmc
 	parrot setup.pir
 
 test: installable_epsilon
