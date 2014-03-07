@@ -6,6 +6,16 @@ sub &postfix:<!> ($expr) {
   }
 }
 
+sub &prefix:('#') ($expr) {
+    if pir::typeof($expr) eq 'ResizablePMCArray' {
+        +$expr;
+    } elsif pir::typeof($expr) eq 'String' {
+        pir::length($expr);
+    } else {
+        Undef;
+    }
+}
+
 sub &prefix:<+> ($expr) { +$expr }
 
 sub &prefix:<-> ($expr) {

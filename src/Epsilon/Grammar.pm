@@ -41,8 +41,9 @@ rule expression {
 ## Operators
 
 INIT {
-    Epsilon::Grammar.O(':prec<o>, :assoc<unary>', '%postcircumfix');
-    Epsilon::Grammar.O(':prec<o>, :assoc<unary>', '%unary-applicative');
+    Epsilon::Grammar.O(':prec<p>, :assoc<unary>', '%postcircumfix');
+    Epsilon::Grammar.O(':prec<p>, :assoc<unary>', '%unary-applicative');
+    Epsilon::Grammar.O(':prec<o>, :assoc<unary>', '%unary-count');
     Epsilon::Grammar.O(':prec<n>, :assoc<unary>', '%unary-negative');
     Epsilon::Grammar.O(':prec<n>, :assoc<unary>', '%unary-not');
     Epsilon::Grammar.O(':prec<m>, :assoc<left>',  '%applicative');
@@ -67,6 +68,8 @@ token postcircumfix:sym<[ ]> {
 }
 
 token postfix:sym<!> { <sym> <O('%unary-applicative')> }
+
+token prefix:sym('#') { <sym> <O('%unary-count')> }
 
 token prefix:sym<+> { <sym> <O('%unary-negative')> }
 token prefix:sym<-> { <sym> <O('%unary-negative')> }
