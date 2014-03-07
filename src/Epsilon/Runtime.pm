@@ -23,7 +23,7 @@ sub &prefix:<-> ($expr) {
 }
 
 sub &prefix:<¬> ($expr) {
-    pir::isfalse($expr);
+    pir::not($expr);
 }
 
 sub &infix:<@> ($left, $right) {
