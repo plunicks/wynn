@@ -3,3 +3,6 @@ installable_epsilon: epsilon.pir src/epsilon.pir src/Epsilon/Compiler.pm src/Eps
 
 test: installable_epsilon
 	parrot setup.pir test
+
+clean:
+	parrot setup.pir clean
