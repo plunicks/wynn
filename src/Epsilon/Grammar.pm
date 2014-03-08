@@ -23,13 +23,22 @@ token hashbang {
 
 ## Lexer items
 
-# This <ws> rule treats // as "comment to eol" and /* .. */ as a (potentially)
-# multi-line comment.
+# This <ws> rule treats ## and # followed by whitespace as "comment to eol" and
+# #* .. *# as a (potentially) multi-line comment.
 token ws {
     <!ww>
-    [ '/*' .*? '*/'
-    | '//' \N* \n?
+    [ '#*' .*? '*#'
+    | '#' [ '#' | \s ] \N* \n?
+    | <.pod>
     | \s+ ]*
+}
+
+# Ignore embedded Plain Old Documentation (loose syntax, both old- and new-style
+# endings).
+token pod {
+    ^^ '=' <ident> $$
+    .*?
+    ^^ [ '=cut' | '=end' ] [ \s | $$ ]
 }
 
 ## Expressions
