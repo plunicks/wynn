@@ -68,7 +68,10 @@ token postcircumfix:sym<[ ]> {
     <O('%postcircumfix')>
 }
 
-token postfix:sym<!> { <sym> <O('%unary-applicative')> }
+token postfix:sym<!> {
+    <sym> <!before '='> # don't match in '!='
+    <O('%unary-applicative')>
+}
 
 token prefix:sym('#') { <sym> <O('%unary-count')> }
 
