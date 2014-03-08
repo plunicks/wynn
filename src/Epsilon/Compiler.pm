@@ -8,7 +8,7 @@ INIT {
 }
 
 method load_library ($name, *$extra) {
-    my $namelist := pir::split('::', $name);
+    my $namelist := self.parse_name($name);
 
     my $basename := pir::join('/', $namelist);
 
