@@ -23,6 +23,8 @@ object.
 =cut
 
 .HLL 'epsilon'
+.loadlib 'io_ops'
+.loadlib 'sys_ops'
 .loadlib 'epsilon_group'
 
 .namespace []
