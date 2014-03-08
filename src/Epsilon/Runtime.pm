@@ -1,3 +1,4 @@
+## Operators
 sub &postcircumfix:<[ ]> ($left, $right) {
     if pir::typeof($left) eq 'Void' {
         $left; # return Void when Void is indexed
@@ -84,7 +85,6 @@ sub &infix:<-> ($left, $right) {
 sub &infix:<~> ($left, $right) {
     pir::concat($left, $right);
 }
-
 
 sub &infix:«<»  ($left, $right) { $left < $right }
 sub &infix:«>»  ($left, $right) { $left > $right }
@@ -190,16 +190,23 @@ sub &ternary:<. => ($object, $member, $value) {
     $value;
 }
 
-sub new ($class) {
-    pir::new($class);
-}
+## Utility Functions
+
+sub return ($arg) { $arg }
 
 sub print ($arg) {
     pir::print($arg);
     1;
 }
 
-sub return ($arg) { $arg }
+sub dump ($arg) {
+  Q:PIR {
+      $P0 = find_lex "$arg"
+      load_bytecode 'dumper.pbc'
+      $P1 = get_root_global ['parrot'], '_dumper'
+      $P1($P0)
+  }
+}
 
 sub load ($module) {
   Q:PIR {
@@ -211,14 +218,11 @@ sub load ($module) {
   }
 }
 
-sub dump ($arg) {
-  Q:PIR {
-      $P0 = find_lex "$arg"
-      load_bytecode 'dumper.pbc'
-      $P1 = get_root_global ['parrot'], '_dumper'
-      $P1($P0)
-  }
+sub new ($class) {
+    pir::new($class);
 }
+
+## Library Functions
 
 # function -> list -> list
 sub map ($func) {
