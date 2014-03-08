@@ -7,9 +7,9 @@ sub &postfix:<!> ($expr) {
 }
 
 sub &prefix:('#') ($expr) {
-    if pir::typeof($expr) eq 'ResizablePMCArray' {
+    if pir::does($expr, 'array') || pir::does($expr, 'hash') {
         +$expr;
-    } elsif pir::typeof($expr) eq 'String' {
+    } elsif pir::does($expr, 'string') {
         pir::length($expr);
     } else {
         Undef;
