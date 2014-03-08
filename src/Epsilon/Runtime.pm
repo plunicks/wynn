@@ -136,6 +136,54 @@ sub &postcircumfix:<[ ]> ($left, $right) {
     }
 }
 
+sub &ternary:<:{{ }}> ($name, $body) {
+  Q:PIR {
+      .local pmc name, body, class, lexinfo, it
+      name = find_lex "$name"
+      body = find_lex "$body"
+
+      # if the class exists, then we'll add to it; else create it:
+      class = get_class name
+      unless_null class, got_class
+      class = newclass name
+    got_class:
+
+      lexinfo = body.'get_lexinfo'()
+      it = iter lexinfo
+    loop:
+      unless it goto done
+      $P0 = shift it
+      $S0 = $P0.'key'()
+      addattribute class, $S0
+
+      goto loop
+    done:
+      .return(class)
+  }
+}
+
+sub &infix:<.> ($object, $member) {
+  Q:PIR {
+      .local pmc object, member, value
+      object = find_lex "$object"
+      member = find_lex "$member"
+
+      $S0 = member
+      value = getattribute object, $S0
+
+      .return(value)
+  }
+}
+
+sub &ternary:<. => ($object, $member, $value) {
+    pir::setattribute($object, ~$member, $value);
+    $value;
+}
+
+sub new ($class) {
+    pir::new($class);
+}
+
 sub print ($arg) {
     pir::print($arg);
     1;

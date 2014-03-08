@@ -81,6 +81,33 @@ method term:sym<factor>($/) {
     make $<factor>.ast;
 }
 
+method term:sym<:{{ }}>($/) {
+    make PAST::Op.new(~$<identifier>, $<class_body>.ast, :pasttype<call>,
+                      :name('&ternary:<:{{ }}>'), :node($/));
+}
+
+method class_body($/) {
+    our @?BLOCK;
+    our $?BLOCK;
+
+    my $past := $?BLOCK;
+
+    for $<variable> {
+        my $var := $_.ast;
+        $past.symbol($var.name, :scope<lexical>);
+
+        $var.scope('lexical');
+        $var.isdecl(1);
+        $var.viviself('Undef');
+        $past.push($var);
+    }
+
+    @?BLOCK.shift;
+    $?BLOCK := @?BLOCK[0];
+
+    make $past;
+}
+
 ## Factors
 
 method factor:sym<( )>($/) { make $<expression>.ast; }
@@ -175,6 +202,26 @@ method factor:sym<variable>($/) {
     $past.viviself('Undef');
 
     make $past;
+}
+
+method factor:sym<.>($/) {
+    make $<object_variable>.ast;
+}
+
+method object_variable($/) {
+    my $past := $<variable>.ast;
+    for $<identifier> {
+        $past := PAST::Op.new($past, $_.ast,
+                              :pasttype<call>, :name('&infix:<.>'),
+                              :node($/));
+    }
+    make $past;
+
+}
+
+method factor:sym<. =>($/) {
+    make PAST::Op.new($<object_variable>.ast, $<identifier>.ast, $<value>.ast,
+                      :pasttype<call>, :name('&ternary:<. =>'), :node($/));
 }
 
 method factor:sym<void>($/) {

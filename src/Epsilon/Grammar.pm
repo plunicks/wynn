@@ -41,6 +41,7 @@ rule expression {
 ## Operators
 
 INIT {
+    Epsilon::Grammar.O(':prec<q>, :assoc<unary>', '%member');
     Epsilon::Grammar.O(':prec<p>, :assoc<unary>', '%postcircumfix');
     Epsilon::Grammar.O(':prec<p>, :assoc<unary>', '%unary-applicative');
     Epsilon::Grammar.O(':prec<o>, :assoc<unary>', '%unary-count');
@@ -136,8 +137,20 @@ rule term:sym<function_call> {
     <function_call>
 }
 
+# class definition
+rule term:sym<:{{ }}> {
+    <identifier> ':{{'
+        <.begin_function>
+        <class_body>
+    [ '}}' || <.panic: "Expected '}}'"> ]
+}
+
+rule class_body {
+    <variable> ** ';'
+}
+
 rule term:sym<factor> {
-    <factor>
+    <factor> <!before ':{{'>
 }
 
 ## Factors
@@ -177,6 +190,20 @@ token factor:sym<parameter> {
 
 token factor:sym<variable> {
     <variable> <!before <.ws> '->'>
+               <!before <.ws> '.'>
+}
+
+token factor:sym<.> {
+    <object_variable>
+}
+
+# match before «==» but not before «=»
+token object_variable {
+    <variable> [ '.' <identifier> <!before <.ws> '=' <-[=]>> ]*
+}
+
+token factor:sym<. => {
+    <object_variable> [ '.' <identifier> ] <.ws> '=' <.ws> $<value>=<term>
 }
 
 token factor:sym<void> { '()' }
