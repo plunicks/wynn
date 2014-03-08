@@ -136,7 +136,17 @@ sub &postcircumfix:<[ ]> ($left, $right) {
     }
 }
 
-sub &ternary:<:{{ }}> ($name, $body) {
+sub &circumfix:<{{ }}> ($body) {
+    our $?CURRENT_CLASS_ID;
+
+    # auto-named "anonymous" classes somewhat like Parrot does for blocks:
+    if !$?CURRENT_CLASS_ID {
+        $?CURRENT_CLASS_ID := 1000;
+    } else {
+        $?CURRENT_CLASS_ID := $?CURRENT_CLASS_ID + 1;
+    }
+    my $name := "_class$?CURRENT_CLASS_ID";
+
   Q:PIR {
       .local pmc name, body, class, lexinfo, it
       name = find_lex "$name"

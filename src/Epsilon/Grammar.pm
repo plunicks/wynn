@@ -138,8 +138,8 @@ rule term:sym<function_call> {
 }
 
 # class definition
-rule term:sym<:{{ }}> {
-    <identifier> ':{{'
+rule term:sym<{{ }}> {
+    '{{'
         <.begin_function>
         <class_body>
     [ '}}' || <.panic: "Expected '}}'"> ]
@@ -150,7 +150,7 @@ rule class_body {
 }
 
 rule term:sym<factor> {
-    <factor> <!before ':{{'>
+    <factor>
 }
 
 ## Factors
@@ -162,7 +162,7 @@ token factor:sym<( )> {
 }
 
 token factor:sym<{ }> {
-    '{'
+    '{' <!before '{'>
         <.begin_block>
         <.ws> <expression>
     [ '}' || <.panic: "Expected '}'"> ]

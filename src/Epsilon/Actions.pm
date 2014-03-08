@@ -81,9 +81,9 @@ method term:sym<factor>($/) {
     make $<factor>.ast;
 }
 
-method term:sym<:{{ }}>($/) {
-    make PAST::Op.new(~$<identifier>, $<class_body>.ast, :pasttype<call>,
-                      :name('&ternary:<:{{ }}>'), :node($/));
+method term:sym<{{ }}>($/) {
+    make PAST::Op.new($<class_body>.ast, :pasttype<call>,
+                      :name('&circumfix:<{{ }}>'), :node($/));
 }
 
 method class_body($/) {
