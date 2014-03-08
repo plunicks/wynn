@@ -86,12 +86,35 @@ sub &infix:<~> ($left, $right) {
     pir::concat($left, $right);
 }
 
-sub &infix:«<»  ($left, $right) { $left < $right }
-sub &infix:«>»  ($left, $right) { $left > $right }
-sub &infix:«<=» ($left, $right) { $left <= $right }
-sub &infix:«>=» ($left, $right) { $left >= $right }
-sub &infix:«==» ($left, $right) { $left == $right }
-sub &infix:«!=» ($left, $right) { $left != $right }
+sub &infix:«<»  ($left, $right) {
+    pir::does($left, 'string') || pir::does($right, 'string')
+        ?? $left lt $right !! $left < $right
+}
+
+sub &infix:«>»  ($left, $right) {
+    pir::does($left, 'string') || pir::does($right, 'string')
+        ?? $left gt $right !! $left > $right
+}
+
+sub &infix:«<=» ($left, $right) {
+    pir::does($left, 'string') || pir::does($right, 'string')
+        ?? $left le $right !! $left <= $right
+}
+
+sub &infix:«>=» ($left, $right) {
+    pir::does($left, 'string') || pir::does($right, 'string')
+        ?? $left ge $right !! $left >= $right
+}
+
+sub &infix:«==» ($left, $right) {
+    pir::does($left, 'string') || pir::does($right, 'string')
+        ?? $left eq $right !! $left == $right
+}
+
+sub &infix:«!=» ($left, $right) {
+    pir::does($left, 'string') || pir::does($right, 'string')
+        ?? $left ne $right !! $left != $right
+}
 
 sub &infix:<,>(*@args) {
     my @result := ();
