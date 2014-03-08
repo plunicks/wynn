@@ -81,33 +81,6 @@ method term:sym<factor>($/) {
     make $<factor>.ast;
 }
 
-method term:sym<{{ }}>($/) {
-    make PAST::Op.new($<class_body>.ast, :pasttype<call>,
-                      :name('&circumfix:<{{ }}>'), :node($/));
-}
-
-method class_body($/) {
-    our @?BLOCK;
-    our $?BLOCK;
-
-    my $past := $?BLOCK;
-
-    for $<variable> {
-        my $var := $_.ast;
-        $past.symbol($var.name, :scope<lexical>);
-
-        $var.scope('lexical');
-        $var.isdecl(1);
-        $var.viviself('Undef');
-        $past.push($var);
-    }
-
-    @?BLOCK.shift;
-    $?BLOCK := @?BLOCK[0];
-
-    make $past;
-}
-
 ## Factors
 
 method factor:sym<( )>($/) { make $<expression>.ast; }
@@ -200,6 +173,33 @@ method factor:sym<variable>($/) {
     $past.scope($scope);
     $past.isdecl($isdecl);
     $past.viviself('Undef');
+
+    make $past;
+}
+
+method factor:sym<{{ }}>($/) {
+    make PAST::Op.new($<class_body>.ast, :pasttype<call>,
+                      :name('&circumfix:<{{ }}>'), :node($/));
+}
+
+method class_body($/) {
+    our @?BLOCK;
+    our $?BLOCK;
+
+    my $past := $?BLOCK;
+
+    for $<variable> {
+        my $var := $_.ast;
+        $past.symbol($var.name, :scope<lexical>);
+
+        $var.scope('lexical');
+        $var.isdecl(1);
+        $var.viviself('Undef');
+        $past.push($var);
+    }
+
+    @?BLOCK.shift;
+    $?BLOCK := @?BLOCK[0];
 
     make $past;
 }
