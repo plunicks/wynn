@@ -236,5 +236,5 @@ method factor:sym<float>($/) {
 }
 method factor:sym<quote>($/) { make $<quote>.ast; }
 
-method quote:sym<'>($/) { make $<quote_EXPR>.ast; }
-method quote:sym<">($/) { make $<quote_EXPR>.ast; }
+method quote:sym("'")($/) { make $<quote_EXPR>.ast; }
+method quote:sym('"')($/) { make $<quote_EXPR>.ast; }
