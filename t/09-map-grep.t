@@ -17,7 +17,7 @@ some = map (_ -> _ * 45)
 
 ok $ numbers[9] == 10;
 ok $ quadrupled[9] == 40;
-ok $ quadrupled[11] == 48; // added after map, so not modified
+ok $ quadrupled[11] == 48; # added after map, so not modified
 ok $ +gt3 == 6;
 ok $ gt3[0] == 7;
 ok $ some[1] == 2160;

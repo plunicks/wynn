@@ -9,10 +9,10 @@ ok = {
     }
 };
 
-// string concatenation
+# string concatenation
 ok $ ("a" ~ "b" ~ "c" == "abc");
 
-// strings are not equal to zero unless they are the string "0"
+# strings are not equal to zero unless they are the string "0"
 ok $ ¬("foo" == 0);
 ok $ ¬(0 == "foo");
 ok $ "foo" != 0;
