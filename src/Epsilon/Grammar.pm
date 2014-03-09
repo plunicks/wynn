@@ -44,8 +44,10 @@ token pod {
 ## Expressions
 
 rule expression {
-    <EXPR>
+    <EXPR> | <void>
 }
+
+token void { }
 
 ## Operators
 
@@ -217,8 +219,6 @@ token object_variable {
 token factor:sym<. => {
     <object_variable> [ '.' <identifier> ] <.ws> '=' <.ws> $<value>=<term>
 }
-
-token factor:sym<void> { '()' }
 
 token sign { '+' | '-' }
 token factor:sym<integer> { <sign>? <integer> <!before '.'> }

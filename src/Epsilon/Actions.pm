@@ -15,7 +15,11 @@ method begin_TOP($/) {
 }
 
 method expression($/) {
-    make $<EXPR>.ast;
+    make $<EXPR> ?? $<EXPR>.ast !! $<void>.ast;
+}
+
+method void($/) {
+    make PAST::Val.new(:returns<Void>, :value(), :node($/));
 }
 
 method postcircumfix:sym<[ ]>($/) {
@@ -222,10 +226,6 @@ method object_variable($/) {
 method factor:sym<. =>($/) {
     make PAST::Op.new($<object_variable>.ast, $<identifier>.ast, $<value>.ast,
                       :pasttype<call>, :name('&ternary:<. =>'), :node($/));
-}
-
-method factor:sym<void>($/) {
-    make PAST::Val.new(:returns<Void>, :value(), :node($/));
 }
 
 method factor:sym<integer>($/) {
