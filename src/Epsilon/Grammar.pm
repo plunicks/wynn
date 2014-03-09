@@ -224,8 +224,8 @@ token factor:sym<float> {
 token factor:sym<quote> { <quote> }
 
 proto token quote { <...> }
-token quote:sym("'") { <?[\']> <quote_EXPR: ':q'> }
-token quote:sym('"') { <?[\"]> <quote_EXPR: ':qq'> }
+token quote:sym<' '> { <?[\']> <quote_EXPR: ':q'> }
+token quote:sym<" "> { <?[\"]> <quote_EXPR: ':qq'> }
 
 token quote_atom {
     <!stopper>
