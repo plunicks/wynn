@@ -241,6 +241,8 @@ token quote_atom {
 
 token quote_escape:sym<interpolation> {
     \\ '{' <?quotemod_check('b')>
-        <expression>
+        [ <void> <?before '}'>
+        | <expression>
+        ]
     [ '}' || <.panic: "Expected '}' in string interpolation"> ]
 }

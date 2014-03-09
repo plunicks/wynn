@@ -1,4 +1,4 @@
-print $ "1..32\n";
+print $ "1..33\n";
 
 ok = {
     _test_count = 0;
@@ -31,6 +31,9 @@ ok $ ¬("bar" >= "bas");
 ok $ "bar" <= "bar";
 ok $ "bar" <= "bas";
 ok $ ¬("bar" <= "baq");
+
+# string interpolation
+ok ("foo\{}bar" == "foobar");
 
 x = "bar";
 ok ("foo\{x}" == "foobar");
