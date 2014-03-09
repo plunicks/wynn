@@ -57,16 +57,6 @@ method begin_function($/) {
 
 ## Terms
 
-method invocant($/) {
-    my $past := $<variable>.ast;
-
-    if is_global($past.name) {
-        $past.scope('package');
-    }
-
-    make $past;
-}
-
 method function_call($/) {
     my $past := $<invocant>.ast;
 
@@ -242,4 +232,44 @@ method quote:sym('"')($/) { make $<quote_EXPR>.ast; }
 
 method quote_escape:sym<interpolation>($/) {
     make $<expression> ?? $<expression>.ast !! '';
+}
+
+## Invocants
+
+method invocant:sym<variable>($/) {
+    my $past := $<variable>.ast;
+
+    if is_global($past.name) {
+        $past.scope('package');
+    }
+
+    make $past;
+}
+
+method invocant:sym<( )>($/) { make $<expression>.ast; }
+
+method invocant:sym<{ }>($/) {
+    our @?BLOCK;
+
+    my $past := @?BLOCK.shift;
+    our $?BLOCK := @?BLOCK[0];
+
+    $past.push($<expression>.ast);
+    make $past;
+}
+
+method invocant:sym<{{ }}>($/) {
+    make PAST::Op.new($<class_body>.ast, :pasttype<call>,
+                      :name('&circumfix:<{{ }}>'), :node($/));
+}
+
+method invocant:sym<.>($/) {
+    make $<object_variable>.ast;
+}
+
+method invocant:sym<integer>($/) {
+    make PAST::Val.new(:value(+$/), :returns<Integer>, :node($/));
+}
+method invocant:sym<float>($/) {
+    make PAST::Val.new(:value(+$/), :returns<Float>, :node($/));
 }
