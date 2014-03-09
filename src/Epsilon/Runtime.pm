@@ -1,3 +1,19 @@
+{
+    my sub __call ($left, $right) {
+      Q:PIR {
+          $P0 = find_lex "$left"
+          $P1 = find_lex "$right"
+          $P2 = $P0($P1)
+          .return($P2)
+      }
+    }
+
+  Q:PIR {
+      $P0 = find_lex '__call'
+      set_global '!call', $P0
+  }
+}
+
 ## Operators
 sub &postcircumfix:<[ ]> ($left, $right) {
     if pir::typeof($left) eq 'Void' {
