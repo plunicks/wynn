@@ -1,11 +1,21 @@
 {
     my sub __call ($left, $right) {
-      Q:PIR {
-          $P0 = find_lex "$left"
-          $P1 = find_lex "$right"
-          $P2 = $P0($P1)
-          .return($P2)
-      }
+        if pir::typeof($left) eq 'Void' {
+            $left; # return Void when Void is called/indexed
+        } elsif pir::does($left, 'array') {
+            if pir::typeof($right) eq 'Void' {
+                $left; # return the list when indexed with Void
+            } else {
+                $left[$right];
+            }
+        } else {
+          Q:PIR {
+              $P0 = find_lex "$left"
+              $P1 = find_lex "$right"
+              $P2 = $P0($P1)
+              .return($P2)
+          }
+        }
     }
 
   Q:PIR {
