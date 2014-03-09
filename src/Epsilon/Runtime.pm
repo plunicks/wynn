@@ -9,12 +9,25 @@
                 $left[$right];
             }
         } else {
-          Q:PIR {
-              $P0 = find_lex "$left"
-              $P1 = find_lex "$right"
-              $P2 = $P0($P1)
-              .return($P2)
-          }
+            if pir::typeof($left) eq 'Sub' && $left.arity == 2 {
+                # auto-curry functions of two arguments
+                return sub ($third) {
+                  Q:PIR {
+                      $P0 = find_lex "$left"
+                      $P1 = find_lex "$right"
+                      $P2 = find_lex "$third"
+                      $P3 = $P0($P1, $P2)
+                      .return($P3)
+                  }
+                }
+            } else {
+              Q:PIR {
+                  $P0 = find_lex "$left"
+                  $P1 = find_lex "$right"
+                  $P2 = $P0($P1)
+                  .return($P2)
+              }
+            }
         }
     }
 
