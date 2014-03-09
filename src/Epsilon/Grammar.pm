@@ -230,3 +230,17 @@ token factor:sym<quote> { <quote> }
 proto token quote { <...> }
 token quote:sym("'") { <?[\']> <quote_EXPR: ':q'> }
 token quote:sym('"') { <?[\"]> <quote_EXPR: ':qq'> }
+
+token quote_atom {
+    <!stopper>
+    [
+    | <quote_escape>
+    | [ <-[\\]-stopper> ]+
+    ]
+}
+
+token quote_escape:sym<interpolation> {
+    \\ '{' <?quotemod_check('b')>
+        <expression>
+    [ '}' || <.panic: "Expected '}' in string interpolation"> ]
+}
