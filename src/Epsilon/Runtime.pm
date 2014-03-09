@@ -2,7 +2,7 @@
     my sub __call ($left, $right) {
         if pir::typeof($left) eq 'Void' {
             $left; # return Void when Void is called/indexed
-        } elsif pir::does($left, 'array') {
+        } elsif pir::does($left, 'array') || pir::does($left, 'string') {
             if pir::typeof($right) eq 'Void' {
                 $left; # return the list when indexed with Void
             } else {

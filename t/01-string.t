@@ -1,4 +1,4 @@
-print $ "1..33\n";
+print $ "1..34\n";
 
 ok = {
     _test_count = 0;
@@ -78,5 +78,8 @@ ok $ "f\{xyz = 123}bar" == "f123bar";
 ok ("f\{f = arg1 -> arg2 -> {
     arg1 ~ arg1 ~ arg1 ~ arg2 * arg2
 }; f "o" 5}bar" == "fooo25bar");
+
+# indexing a string (substring)
+ok $ 'bar' 2 == 'r';
 
 1
