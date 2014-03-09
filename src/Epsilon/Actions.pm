@@ -57,7 +57,7 @@ method begin_function($/) {
 
 ## Terms
 
-method function_variable($/) {
+method invocant($/) {
     my $past := $<variable>.ast;
 
     if is_global($past.name) {
@@ -68,7 +68,7 @@ method function_variable($/) {
 }
 
 method function_call($/) {
-    my $past := $<variable>.ast;
+    my $past := $<invocant>.ast;
 
     for $<factor> {
         $past := PAST::Op.new($past, $_.ast, :pasttype<call>, :name('!call'),
