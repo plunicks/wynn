@@ -97,7 +97,11 @@ method begin_block($/) {
 }
 
 method identifier($/) {
-    make ~$<identifier>
+    if $<quoted_identifier> {
+        make $<quoted_identifier>.ast;
+    } else {
+        make ~$<identifier>;
+    }
 }
 
 method quoted_identifier($/) {
@@ -105,7 +109,7 @@ method quoted_identifier($/) {
 }
 
 method variable($/) {
-    make PAST::Var.new(:name(~$<identifier>), :node($/));
+    make PAST::Var.new(:name($<identifier>.ast), :node($/));
 }
 
 method factor:sym<parameter>($/) {
