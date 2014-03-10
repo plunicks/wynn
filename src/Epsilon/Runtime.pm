@@ -8,6 +8,24 @@
             pir::does($invocant, 'string') {
             if pir::typeof($arg) eq 'Void' {
                 $invocant; # return the list when indexed with Void
+            } elsif pir::does($arg, 'array') {
+                if pir::does($invocant, 'array') {
+                    # index a list with a list: return a list of the
+                    # selected elements
+                    my $result := [];
+                    for $arg {
+                        $result.push($invocant[$_]);
+                    }
+                    $result;
+                } else {
+                    # index a string with a list: return a string of the
+                    # selected characters
+                    my $result := '';
+                    for $arg {
+                        $result := $result ~ $invocant[$_];
+                    }
+                    $result;
+                }
             } else {
                 $invocant[$arg];
             }
