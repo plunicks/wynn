@@ -191,6 +191,10 @@ token factor:sym<variable> {
                <!before <.ws> '.'>
 }
 
+token factor:sym<symbol> {
+    ':' <identifier>
+}
+
 # class definition
 rule factor:sym<[ ]> {
     '['

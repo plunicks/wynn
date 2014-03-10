@@ -171,6 +171,10 @@ method factor:sym<variable>($/) {
     make $past;
 }
 
+method factor:sym<symbol>($/) {
+    make $<identifier>.ast;
+}
+
 method factor:sym<[ ]>($/) {
     make PAST::Op.new($<class_body>.ast, :pasttype<call>,
                       :name('&circumfix:<[ ]>'), :node($/));
