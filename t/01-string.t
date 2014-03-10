@@ -1,13 +1,6 @@
 print $ "1..34\n";
 
-ok = {
-    _test_count = 0;
-    ok = expr -> {
-        _test_count = _test_count + 1;
-        expr || print "not ";
-        print $ "ok " ~ _test_count ~ "\n"
-    }
-};
+ok = load 'Test';
 
 # string concatenation
 ok $ ("a" ~ "b" ~ "c" == "abc");

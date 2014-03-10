@@ -1,13 +1,6 @@
 print "1..15\n";
 
-ok = {
-    _test_count = 0;
-    ok = expr -> {
-        _test_count = _test_count + 1;
-        expr || print "not ";
-        print $ "ok " ~ _test_count ~ "\n"
-    }
-};
+ok = load 'Test';
 
 identifier-with-hyphen = 2;
 ok identifier-with-hyphen;
