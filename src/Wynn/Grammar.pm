@@ -69,6 +69,7 @@ INIT {
     Wynn::Grammar.O(':prec<M>, :assoc<right>', '%applicative-low');
     Wynn::Grammar.O(':prec<I>, :assoc<unary>', '%unary-function');
     Wynn::Grammar.O(':prec<I>, :assoc<right>', '%function');
+    Wynn::Grammar.O(':prec<I>, :assoc<right>', '%pair');
     Wynn::Grammar.O(':prec<F>, :assoc<right>', '%assign');
     Wynn::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
 }
@@ -122,6 +123,10 @@ token prefix:sym«->» {
 token infix:sym«->» {
     <sym> <.begin_function>
     <O('%function')>
+}
+
+token infix:sym«=>» {
+    <sym> <O('%pair')>
 }
 
 token infix:sym<=>  { <sym> <O('%assign, :pasttype<bind>')> }

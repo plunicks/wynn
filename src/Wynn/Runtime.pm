@@ -92,6 +92,8 @@
       set_hll_global '<<', $P0
       $P0 = get_hll_global '&infix:<$>'
       set_hll_global '$', $P0
+      $P0 = get_hll_global '&infix:<=>>'
+      set_hll_global '=>', $P0
       $P0 = get_hll_global '&infix:<;>'
       set_hll_global ';', $P0
       $P0 = get_hll_global '&infix:<.>'
@@ -270,6 +272,10 @@ sub &infix:<$> ($left, $right) {
       $P2 = $P0($P1)
       .return($P2)
   }
+}
+
+sub &infix:«=>»($key, $value) {
+    return ($key, $value);
 }
 
 sub &infix:<;>($left, $right) {
