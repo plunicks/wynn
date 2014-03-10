@@ -273,3 +273,4 @@ method invocant:sym<integer>($/) {
 method invocant:sym<float>($/) {
     make PAST::Val.new(:value(+$/), :returns<Float>, :node($/));
 }
+method invocant:sym<quote>($/) { make $<quote>.ast; }

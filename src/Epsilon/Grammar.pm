@@ -277,3 +277,4 @@ token invocant:sym<integer> { <sign>? <integer> <!before '.'> }
 token invocant:sym<float> {
     <sign>? [ \d+ '.' \d* | \d* '.' \d+ ]
 }
+token invocant:sym<quote> { <?[\']> $<quote>=<quote_EXPR: ':q'> }
