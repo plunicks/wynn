@@ -9,6 +9,9 @@
             } else {
                 $invocant[$arg];
             }
+        } elsif pir::isa($invocant, 'Class') &&
+            !pir::isa($invocant, 'Object') {
+            pir::new($invocant);
         } else {
             if pir::typeof($invocant) eq 'Sub' && $invocant.arity == 2 {
                 # auto-curry functions of two arguments
@@ -279,10 +282,6 @@ sub load ($module) {
       result = compiler.'load_library'(module)
       .return(result)
   }
-}
-
-sub new ($class) {
-    pir::new($class);
 }
 
 ## Library Functions
