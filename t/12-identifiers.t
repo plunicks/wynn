@@ -33,7 +33,7 @@ ok $ foo == "test string 156";
 # quoted operators called as functions
 ok $ «<» 1 2;
 ok $ («+» 8 7) == 15;
-ok $ («,» 247)[0] == 247;
+ok $ («,» 247) 0 == 247;
 ok $ («+» 8 $ «*» 2 7) == 22;
 ok $ «!=» 19 71;
 ok $ «==» («-» 100 43) $ «+» 50 $ «/» 14 2;
