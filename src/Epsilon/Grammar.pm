@@ -187,11 +187,11 @@ token factor:sym<variable> {
 }
 
 # class definition
-rule factor:sym<{{ }}> {
-    '{{'
+rule factor:sym<[ ]> {
+    '['
         <.begin_function>
         <class_body>
-    [ '}}' || <.panic: "Expected '}}'"> ]
+    [ ']' || <.panic: "Expected ']'"> ]
 }
 
 rule class_body {
@@ -257,11 +257,11 @@ token invocant:sym<{ }> {
     [ '}' || <.panic: "Expected '}'"> ]
 }
 
-rule invocant:sym<{{ }}> {
-    '{{'
+rule invocant:sym<[ ]> {
+    '['
         <.begin_function>
         <class_body>
-    [ '}}' || <.panic: "Expected '}}'"> ]
+    [ ']' || <.panic: "Expected ']'"> ]
 }
 
 token invocant:sym<.> {

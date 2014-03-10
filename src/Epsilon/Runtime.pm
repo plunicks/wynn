@@ -280,7 +280,7 @@ sub &infix:<;>($left, $right) {
     }
 }
 
-sub &circumfix:<{{ }}> ($body) {
+sub &circumfix:<[ ]> ($body) {
     our $?CURRENT_CLASS_ID;
 
     # auto-named "anonymous" classes somewhat like Parrot does for blocks:

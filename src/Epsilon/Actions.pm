@@ -171,9 +171,9 @@ method factor:sym<variable>($/) {
     make $past;
 }
 
-method factor:sym<{{ }}>($/) {
+method factor:sym<[ ]>($/) {
     make PAST::Op.new($<class_body>.ast, :pasttype<call>,
-                      :name('&circumfix:<{{ }}>'), :node($/));
+                      :name('&circumfix:<[ ]>'), :node($/));
 }
 
 method class_body($/) {
@@ -257,9 +257,9 @@ method invocant:sym<{ }>($/) {
     make $past;
 }
 
-method invocant:sym<{{ }}>($/) {
+method invocant:sym<[ ]>($/) {
     make PAST::Op.new($<class_body>.ast, :pasttype<call>,
-                      :name('&circumfix:<{{ }}>'), :node($/));
+                      :name('&circumfix:<[ ]>'), :node($/));
 }
 
 method invocant:sym<.>($/) {
