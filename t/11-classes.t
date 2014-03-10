@@ -4,24 +4,17 @@ f.x = 2;
 f.y = 5;
 print $ "1.." ~ (f.y - f.x + 8) ~ "\n";
 
-(f.y - f.x == 3) && print "ok 1\n";
+ok = load 'Test';
+
+ok (f.y - f.x == 3);
 
 f.bar = [ a ; b ; c ] ();
 f.bar.a = "ok";
 f.bar.b = 2;
 f.bar.c = 3;
 
-print $ (f.bar.a) ~ " " ~ f.bar.b ~ "\n";
-print $ f.bar.a ~ " " ~ f.bar.c ~ "\n";
-
-ok = {
-    _test_count = 3; # start counting after the 3 tests above
-    ok = expr -> {
-        _test_count = _test_count + 1;
-        expr || print "not ";
-        print $ "ok " ~ _test_count ~ "\n"
-    }
-};
+ok $ f.bar.b == 2;
+ok $ f.bar.c == 3;
 
 
 ## Test that distinct objects are really distinct.
