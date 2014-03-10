@@ -1,3 +1,5 @@
+## Function Calls
+
 {
     my sub __call ($invocant, $arg) {
         if pir::typeof($invocant) eq 'Void' {
@@ -13,25 +15,20 @@
             !pir::isa($invocant, 'Object') {
             pir::new($invocant);
         } else {
-            if pir::typeof($invocant) eq 'Sub' && $invocant.arity == 2 {
-                # auto-curry functions of two arguments
-                return sub ($third) {
-                  Q:PIR {
-                      $P0 = find_lex "$invocant"
-                      $P1 = find_lex "$arg"
-                      $P2 = find_lex "$third"
-                      $P3 = $P0($P1, $P2)
-                      .return($P3)
-                  }
-                }
-            } else {
-              Q:PIR {
-                  $P0 = find_lex "$invocant"
-                  $P1 = find_lex "$arg"
-                  $P2 = $P0($P1)
-                  .return($P2)
-              }
+            if pir::typeof($invocant) ne 'CurriedSub' &&
+                pir::can($invocant, 'arity') && $invocant.arity > 1 {
+                # auto-curry functions of more than one argument
+                my $csub := pir::new('CurriedSub');
+                $csub.set_sub($invocant);
+                $invocant := $csub;
             }
+
+          Q:PIR {
+              $P0 = find_lex "$invocant"
+              $P1 = find_lex "$arg"
+              $P2 = $P0($P1)
+              .return($P2)
+          }
         }
     }
 
@@ -83,6 +80,30 @@
       set_hll_global '.', $P0
   }
 }
+
+class CurriedSub is Sub {
+    has $sub;
+    has @args;
+    method arity () { $sub.arity - +@args }
+
+    method set_sub ($s) {
+        $sub := $s;
+        @args := ();
+    }
+
+    method ($arg) is pirflags<:vtable('invoke')> {
+        @args.push($arg);
+        if (self.arity == 0) {
+            return $sub(|@args);
+        } else {
+            return self;
+        }
+    }
+}
+
+# declare the class Sub so CurriedSub can subclass it.
+# defined internally in Parrot.
+class Sub {}
 
 ## Operators
 sub &postcircumfix:<[ ]> ($left, $right) {
