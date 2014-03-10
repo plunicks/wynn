@@ -3,11 +3,11 @@ Copyright (C) 20xx, Parrot Foundation.
 
 =head1 NAME
 
-src/pmc/Epsilon.pmc - Epsilon
+src/pmc/Wynn.pmc - Wynn
 
 =head1 DESCRIPTION
 
-These are the vtable functions for the Epsilon class.
+These are the vtable functions for the Wynn class.
 
 =cut
 
@@ -56,10 +56,10 @@ size(Interp *interp, PMC* self, PMC* obj)
 
 */
 
-pmclass Epsilon
+pmclass Wynn
     extends ResizablePMCArray
     provides array
-    group   epsilon_group
+    group   wynn_group
     auto_attrs
     dynpmc
     {
@@ -116,7 +116,7 @@ Returns a vector-like PMC.
             */
             /*
             array_t = Parrot_pmc_get_type_str(INTERP,
-                string_from_literal(INTERP, "Epsilon"));
+                string_from_literal(INTERP, "Wynn"));
             */
             property = Parrot_pmc_new(INTERP, VTABLE_type(INTERP, SELF));
 
@@ -132,7 +132,7 @@ Returns a vector-like PMC.
 
 =item C<PMC* set()>
 
-Change the existing Epsilon by passing in an existing vector.
+Change the existing Wynn by passing in an existing vector.
 
 If the new property is larger than our old property, pad the end of the vector
 with elements from the beginning.

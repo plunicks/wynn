@@ -1,15 +1,15 @@
 
 =head1 TITLE
 
-epsilon.pir - A Epsilon compiler.
+wynn.pir - A Wynn compiler.
 
 =head2 Description
 
-This is the base file for the Epsilon compiler.
+This is the base file for the Wynn compiler.
 
 This file includes the parsing and grammar rules from
 the src/ directory, loads the relevant PGE libraries,
-and registers the compiler under the name 'Epsilon'.
+and registers the compiler under the name 'Wynn'.
 
 =head2 Functions
 
@@ -17,15 +17,15 @@ and registers the compiler under the name 'Epsilon'.
 
 =item onload()
 
-Creates the Epsilon compiler using a C<PCT::HLLCompiler>
+Creates the Wynn compiler using a C<PCT::HLLCompiler>
 object.
 
 =cut
 
-.HLL 'epsilon'
+.HLL 'wynn'
 .loadlib 'io_ops'
 .loadlib 'sys_ops'
-.loadlib 'epsilon_group'
+.loadlib 'wynn_group'
 
 .namespace []
 

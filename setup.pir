@@ -45,51 +45,51 @@ No Configure step, no Makefile generated.
   L1:
 
     $P0 = new 'Hash'
-    $P0['name'] = 'Epsilon'
-    $P0['abstract'] = 'the Epsilon compiler'
-    $P0['description'] = 'the Epsilon for Parrot VM.'
+    $P0['name'] = 'Wynn'
+    $P0['abstract'] = 'the Wynn compiler'
+    $P0['description'] = 'the Wynn for Parrot VM.'
 
     # build
     $P1 = new 'Hash'
-    $P1['epsilon_ops'] = 'src/ops/epsilon.ops'
+    $P1['wynn_ops'] = 'src/ops/wynn.ops'
     $P0['dynops'] = $P1
 
     $P2 = new 'Hash'
-    $P3 = split ' ', 'src/pmc/epsilon.pmc src/pmc/void.pmc'
-    $P2['epsilon_group'] = $P3
+    $P3 = split ' ', 'src/pmc/wynn.pmc src/pmc/void.pmc'
+    $P2['wynn_group'] = $P3
     $P0['dynpmc'] = $P2
 
     $P4 = new 'Hash'
-    $P4['src/gen_actions.pir'] = 'src/Epsilon/Actions.pm'
-    $P4['src/gen_compiler.pir'] = 'src/Epsilon/Compiler.pm'
-    $P4['src/gen_grammar.pir'] = 'src/Epsilon/Grammar.pm'
-    $P4['src/gen_runtime.pir'] = 'src/Epsilon/Runtime.pm'
+    $P4['src/gen_actions.pir'] = 'src/Wynn/Actions.pm'
+    $P4['src/gen_compiler.pir'] = 'src/Wynn/Compiler.pm'
+    $P4['src/gen_grammar.pir'] = 'src/Wynn/Grammar.pm'
+    $P4['src/gen_runtime.pir'] = 'src/Wynn/Runtime.pm'
     $P0['pir_nqp-rx'] = $P4
 
     $P5 = new 'Hash'
     $P6 = split "\n", <<'SOURCES'
-src/epsilon.pir
+src/wynn.pir
 src/gen_actions.pir
 src/gen_compiler.pir
 src/gen_grammar.pir
 src/gen_runtime.pir
 SOURCES
     $S0 = pop $P6
-    $P5['epsilon/epsilon.pbc'] = $P6
-    $P5['epsilon.pbc'] = 'epsilon.pir'
+    $P5['wynn/wynn.pbc'] = $P6
+    $P5['wynn.pbc'] = 'wynn.pir'
     $P0['pbc_pir'] = $P5
 
     $P7 = new 'Hash'
-    $P7['parrot-epsilon'] = 'epsilon.pbc'
+    $P7['parrot-wynn'] = 'wynn.pbc'
     $P0['installable_pbc'] = $P7
 
     # test
     $S0 = get_parrot()
-    $S0 .= ' epsilon.pbc'
+    $S0 .= ' wynn.pbc'
     $P0['prove_exec'] = $S0
 
     # install
-    $P0['inst_lang'] = 'epsilon/epsilon.pbc'
+    $P0['inst_lang'] = 'wynn/wynn.pbc'
 
     # dist
     $P0['doc_files'] = 'README'

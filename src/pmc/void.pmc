@@ -6,7 +6,7 @@ src/pmc/void.pmc - A void value
 
 =head1 DESCRIPTION
 
-This is Epsilon's void type. Void is considered an identity for associative
+This is Wynn's void type. Void is considered an identity for associative
 arithmetic operators. For example, any number plus void is the number itself
 and any number multiplied by void is the same number. Under cons operators,
 void evaluates to an empty array and for list-joining operators void is
@@ -28,7 +28,7 @@ Void does not change its type or value when a value is assigned to it.
 */
 
 pmclass Void
-    group epsilon_group
+    group wynn_group
     auto_attrs
     no_ro
     dynpmc

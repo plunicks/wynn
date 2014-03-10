@@ -1,10 +1,10 @@
-class Epsilon::Compiler is HLL::Compiler;
+class Wynn::Compiler is HLL::Compiler;
 
 INIT {
-    Epsilon::Compiler.language('Epsilon');
-    Epsilon::Compiler.parsegrammar(Epsilon::Grammar);
-    Epsilon::Compiler.parseactions(Epsilon::Actions);
-    Epsilon::Compiler.commandline_prompt('<ε> ');
+    Wynn::Compiler.language('Wynn');
+    Wynn::Compiler.parsegrammar(Wynn::Grammar);
+    Wynn::Compiler.parseactions(Wynn::Actions);
+    Wynn::Compiler.commandline_prompt('<ƿ> ');
 }
 
 method load_library ($name, *$extra) {
@@ -27,9 +27,9 @@ method load_library ($name, *$extra) {
       $I0 = stat filename, 0
       if $I0 goto eval_parrot
 
-      filename = concat basename, '.ep'
+      filename = concat basename, '.wy'
       $I0 = stat filename, 0
-      if $I0 goto eval_epsilon
+      if $I0 goto eval_wynn
 
     failed:
       .local pmc name_pmc
@@ -47,7 +47,7 @@ method load_library ($name, *$extra) {
       load_bytecode filename
       .return(1)
 
-    eval_epsilon:
+    eval_wynn:
       result = self.'evalfiles'(filename)
       .return(result)
   };

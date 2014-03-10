@@ -1,10 +1,10 @@
 =begin overview
 
-This is the grammar for Epsilon in Perl 6 rules.
+This is the grammar for Wynn in Perl 6 rules.
 
 =end overview
 
-grammar Epsilon::Grammar is HLL::Grammar;
+grammar Wynn::Grammar is HLL::Grammar;
 
 token TOP {
     ^ <hashbang>?
@@ -52,25 +52,25 @@ token void { }
 ## Operators
 
 INIT {
-    Epsilon::Grammar.O(':prec<q>, :assoc<unary>', '%member');
-    Epsilon::Grammar.O(':prec<p>, :assoc<unary>', '%unary-applicative');
-    Epsilon::Grammar.O(':prec<o>, :assoc<unary>', '%unary-count');
-    Epsilon::Grammar.O(':prec<n>, :assoc<unary>', '%unary-negative');
-    Epsilon::Grammar.O(':prec<n>, :assoc<unary>', '%unary-not');
-    Epsilon::Grammar.O(':prec<m>, :assoc<left>',  '%applicative');
-    Epsilon::Grammar.O(':prec<e>, :assoc<left>',  '%multiplicative');
-    Epsilon::Grammar.O(':prec<d>, :assoc<left>',  '%additive');
-    Epsilon::Grammar.O(':prec<a>, :assoc<left>',  '%comparative');
-    Epsilon::Grammar.O(':prec<S>, :assoc<list>',  '%list');
-    Epsilon::Grammar.O(':prec<R>, :assoc<right>', '%cons');
-    Epsilon::Grammar.O(':prec<R>, :assoc<left>',  '%cons-left');
-    Epsilon::Grammar.O(':prec<P>, :assoc<left>',  '%conjunctive');
-    Epsilon::Grammar.O(':prec<O>, :assoc<left>',  '%disjunctive');
-    Epsilon::Grammar.O(':prec<M>, :assoc<right>', '%applicative-low');
-    Epsilon::Grammar.O(':prec<I>, :assoc<unary>', '%unary-function');
-    Epsilon::Grammar.O(':prec<I>, :assoc<right>', '%function');
-    Epsilon::Grammar.O(':prec<F>, :assoc<right>', '%assign');
-    Epsilon::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
+    Wynn::Grammar.O(':prec<q>, :assoc<unary>', '%member');
+    Wynn::Grammar.O(':prec<p>, :assoc<unary>', '%unary-applicative');
+    Wynn::Grammar.O(':prec<o>, :assoc<unary>', '%unary-count');
+    Wynn::Grammar.O(':prec<n>, :assoc<unary>', '%unary-negative');
+    Wynn::Grammar.O(':prec<n>, :assoc<unary>', '%unary-not');
+    Wynn::Grammar.O(':prec<m>, :assoc<left>',  '%applicative');
+    Wynn::Grammar.O(':prec<e>, :assoc<left>',  '%multiplicative');
+    Wynn::Grammar.O(':prec<d>, :assoc<left>',  '%additive');
+    Wynn::Grammar.O(':prec<a>, :assoc<left>',  '%comparative');
+    Wynn::Grammar.O(':prec<S>, :assoc<list>',  '%list');
+    Wynn::Grammar.O(':prec<R>, :assoc<right>', '%cons');
+    Wynn::Grammar.O(':prec<R>, :assoc<left>',  '%cons-left');
+    Wynn::Grammar.O(':prec<P>, :assoc<left>',  '%conjunctive');
+    Wynn::Grammar.O(':prec<O>, :assoc<left>',  '%disjunctive');
+    Wynn::Grammar.O(':prec<M>, :assoc<right>', '%applicative-low');
+    Wynn::Grammar.O(':prec<I>, :assoc<unary>', '%unary-function');
+    Wynn::Grammar.O(':prec<I>, :assoc<right>', '%function');
+    Wynn::Grammar.O(':prec<F>, :assoc<right>', '%assign');
+    Wynn::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
 }
 
 token postfix:sym<!> {

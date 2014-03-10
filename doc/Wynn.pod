@@ -1,5 +1,5 @@
 
-=head1 Epsilon
+=head1 Wynn
 
 =head1 Design
 

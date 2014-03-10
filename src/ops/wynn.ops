@@ -9,7 +9,7 @@ BEGIN_OPS_PREAMBLE
 END_OPS_PREAMBLE
 
 /* Op to get the address of a PMC. */
-inline op epsilon_pmc_addr(out INT, invar PMC)  {
+inline op wynn_pmc_addr(out INT, invar PMC)  {
     $1 = (int) $2;
     goto NEXT();
 }

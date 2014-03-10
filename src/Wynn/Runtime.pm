@@ -356,7 +356,7 @@ sub load ($module) {
   Q:PIR {
       .local pmc module, compiler, result
       module = find_lex "$module"
-      compiler = compreg 'Epsilon'
+      compiler = compreg 'Wynn'
       result = compiler.'load_library'(module)
       .return(result)
   }

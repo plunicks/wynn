@@ -1,16 +1,16 @@
 
 =head1 Running
 
-This document describes how to use the command line epsilon program, which
+This document describes how to use the command line wynn program, which
 ...
 
 =head2 Usage
 
-  parrot epsilon.pbc [OPTIONS] <input>
+  parrot wynn.pbc [OPTIONS] <input>
 
 or
 
-  parrot-epsilon@exe [OPTIONS] <input>
+  parrot-wynn@exe [OPTIONS] <input>
 
 A number of additional options are available:
 

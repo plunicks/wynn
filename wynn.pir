@@ -1,11 +1,11 @@
 
 =head1 TITLE
 
-epsilon.pir - A Epsilon compiler.
+wynn.pir - A Wynn compiler.
 
 =head2 Description
 
-This is the entry point for the Epsilon compiler.
+This is the entry point for the Wynn compiler.
 
 =head2 Functions
 
@@ -14,16 +14,16 @@ This is the entry point for the Epsilon compiler.
 =item main(args :slurpy)  :main
 
 Start compilation by passing any command line C<args>
-to the Epsilon compiler.
+to the Wynn compiler.
 
 =cut
 
 .sub 'main' :main
     .param pmc args
 
-    load_language 'epsilon'
+    load_language 'wynn'
 
-    $P0 = compreg 'Epsilon'
+    $P0 = compreg 'Wynn'
     $P1 = $P0.'command_line'(args, 'encoding' => 'utf8')
 .end
 

@@ -1,4 +1,4 @@
-class Epsilon::Actions is HLL::Actions;
+class Wynn::Actions is HLL::Actions;
 
 method TOP($/) {
     our @?BLOCK;
@@ -8,7 +8,7 @@ method TOP($/) {
 }
 
 method begin_TOP($/) {
-    our $?BLOCK := PAST::Block.new(:hll<epsilon>, :node($/),
+    our $?BLOCK := PAST::Block.new(:hll<wynn>, :node($/),
                                    :blocktype<declaration>);
     our @?BLOCK := ();
     @?BLOCK.unshift($?BLOCK);

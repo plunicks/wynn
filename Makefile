@@ -1,7 +1,7 @@
-installable_epsilon: epsilon.pir src/epsilon.pir src/Epsilon/Compiler.pm src/Epsilon/Actions.pm src/Epsilon/Grammar.pm src/Epsilon/Runtime.pm src/pmc/void.pmc
+installable_wynn: wynn.pir src/wynn.pir src/Wynn/Compiler.pm src/Wynn/Actions.pm src/Wynn/Grammar.pm src/Wynn/Runtime.pm src/pmc/void.pmc
 	parrot setup.pir
 
-test: installable_epsilon
+test: installable_wynn
 	parrot setup.pir test
 
 clean:
