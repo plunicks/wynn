@@ -1,0 +1,10 @@
+ok = {
+    _test_count = 0;
+    ok = expr -> {
+        _test_count = _test_count + 1;
+        expr || print "not ";
+        print $ "ok " ~ _test_count ~ "\n"
+    }
+};
+
+()
