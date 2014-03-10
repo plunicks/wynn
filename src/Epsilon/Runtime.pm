@@ -38,6 +38,47 @@
   Q:PIR {
       $P0 = find_lex '__call'
       set_global '!call', $P0
+
+      # Short names for all infix operators.
+      # Note that Parrot wraps all these operator symbols in <> when
+      # generating sub names even though some of them contain '<' or '>':
+      $P0 = get_hll_global '&infix:<@>'
+      set_hll_global '@', $P0
+      $P0 = get_hll_global '&infix:<*>'
+      set_hll_global '*', $P0
+      $P0 = get_hll_global '&infix:</>'
+      set_hll_global '/', $P0
+      $P0 = get_hll_global '&infix:<+>'
+      set_hll_global '+', $P0
+      $P0 = get_hll_global '&infix:<->'
+      set_hll_global '-', $P0
+      $P0 = get_hll_global '&infix:<~>'
+      set_hll_global '~', $P0
+      $P0 = get_hll_global '&infix:<<>'
+      set_hll_global '<', $P0
+      $P0 = get_hll_global '&infix:<>>'
+      set_hll_global '>', $P0
+      $P0 = get_hll_global '&infix:<<=>'
+      set_hll_global '<=', $P0
+      $P0 = get_hll_global '&infix:<>=>'
+      set_hll_global '>=', $P0
+      $P0 = get_hll_global '&infix:<==>'
+      set_hll_global '==', $P0
+      $P0 = get_hll_global '&infix:<!=>'
+      set_hll_global '!=', $P0
+      # Note: «,» has different semantics since it's :slurpy.
+      $P0 = get_hll_global '&infix:<,>'
+      set_hll_global ',', $P0
+      $P0 = get_hll_global '&infix:<>>>'
+      set_hll_global '>>', $P0
+      $P0 = get_hll_global '&infix:<<<>'
+      set_hll_global '<<', $P0
+      $P0 = get_hll_global '&infix:<$>'
+      set_hll_global '$', $P0
+      $P0 = get_hll_global '&infix:<;>'
+      set_hll_global ';', $P0
+      $P0 = get_hll_global '&infix:<.>'
+      set_hll_global '.', $P0
   }
 }
 
