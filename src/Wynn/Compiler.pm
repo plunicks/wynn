@@ -1,10 +1,13 @@
 class Wynn::Compiler is HLL::Compiler;
 
+has @LIBRARY_PATH;
+
 INIT {
     Wynn::Compiler.language('Wynn');
     Wynn::Compiler.parsegrammar(Wynn::Grammar);
     Wynn::Compiler.parseactions(Wynn::Actions);
     Wynn::Compiler.commandline_prompt('<ƿ> ');
+    Wynn::Compiler.init_library_path;
 }
 
 method load_library ($name, *$extra) {
@@ -19,17 +22,30 @@ method load_library ($name, *$extra) {
       basename_pmc = find_lex "$basename"
       basename = basename_pmc
 
-      filename = concat basename, '.pbc'
+      .local pmc paths, path_it
+      paths = self.'get_library_path'()
+      path_it = iter paths
+
+    path_loop:
+      unless path_it goto failed
+      .local string pathname
+      pathname = shift path_it
+      pathname = concat pathname, '/'
+      pathname = concat pathname, basename
+
+      filename = concat pathname, '.pbc'
       $I0 = stat filename, 0
       if $I0 goto eval_parrot
 
-      filename = concat basename, '.pir'
+      filename = concat pathname, '.pir'
       $I0 = stat filename, 0
       if $I0 goto eval_parrot
 
-      filename = concat basename, '.wy'
+      filename = concat pathname, '.wy'
       $I0 = stat filename, 0
       if $I0 goto eval_wynn
+
+      goto path_loop
 
     failed:
       .local pmc name_pmc
@@ -51,4 +67,22 @@ method load_library ($name, *$extra) {
       result = self.'evalfiles'(filename)
       .return(result)
   };
+}
+
+method init_library_path () {
+  Q:PIR {
+      .local pmc env, paths
+      env = new 'Env'
+      paths = new 'ResizableStringArray'
+      $S0 = env['WYNN_LIBRARY_PATH']
+      if $S0 goto have_lib_paths
+      $S0 = '.:lib'
+    have_lib_paths:
+      paths = split ':', $S0
+      setattribute self, '@LIBRARY_PATH', paths
+  }
+}
+
+method get_library_path () {
+    return @LIBRARY_PATH;
 }
