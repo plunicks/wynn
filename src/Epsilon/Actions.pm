@@ -22,11 +22,6 @@ method void($/) {
     make PAST::Val.new(:returns<Void>, :value(), :node($/));
 }
 
-method postcircumfix:sym<[ ]>($/) {
-    make PAST::Op.new($<expression>.ast, :pasttype<call>,
-                      :name('&postcircumfix:<[ ]>'), :node($/));
-}
-
 method prefix:sym«->»($/) {
     our @?BLOCK;
     our $?BLOCK;

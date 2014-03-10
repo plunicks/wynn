@@ -124,16 +124,6 @@ class CurriedSub is Sub {
 class Sub {}
 
 ## Operators
-sub &postcircumfix:<[ ]> ($left, $right) {
-    if pir::typeof($left) eq 'Void' {
-        $left; # return Void when Void is indexed
-    } elsif pir::typeof($right) eq 'Void' {
-        $left; # return the list when indexed with Void
-    } else {
-        $left[$right];
-    }
-}
-
 sub &postfix:<!> ($expr) {
   Q:PIR {
       $P0 = find_lex "$expr"

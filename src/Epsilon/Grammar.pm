@@ -53,7 +53,6 @@ token void { }
 
 INIT {
     Epsilon::Grammar.O(':prec<q>, :assoc<unary>', '%member');
-    Epsilon::Grammar.O(':prec<p>, :assoc<unary>', '%postcircumfix');
     Epsilon::Grammar.O(':prec<p>, :assoc<unary>', '%unary-applicative');
     Epsilon::Grammar.O(':prec<o>, :assoc<unary>', '%unary-count');
     Epsilon::Grammar.O(':prec<n>, :assoc<unary>', '%unary-negative');
@@ -72,11 +71,6 @@ INIT {
     Epsilon::Grammar.O(':prec<I>, :assoc<right>', '%function');
     Epsilon::Grammar.O(':prec<F>, :assoc<right>', '%assign');
     Epsilon::Grammar.O(':prec<1>, :assoc<right>', '%sequencing');
-}
-
-token postcircumfix:sym<[ ]> {
-    '[' <expression> [ ']' || <.panic: "Expected ']'"> ]
-    <O('%postcircumfix')>
 }
 
 token postfix:sym<!> {
