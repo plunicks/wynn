@@ -1,20 +1,21 @@
 {
-    my sub __call ($left, $right) {
-        if pir::typeof($left) eq 'Void' {
-            $left; # return Void when Void is called/indexed
-        } elsif pir::does($left, 'array') || pir::does($left, 'string') {
-            if pir::typeof($right) eq 'Void' {
-                $left; # return the list when indexed with Void
+    my sub __call ($invocant, $arg) {
+        if pir::typeof($invocant) eq 'Void' {
+            $invocant; # return Void when Void is called/indexed
+        } elsif pir::does($invocant, 'array') ||
+            pir::does($invocant, 'string') {
+            if pir::typeof($arg) eq 'Void' {
+                $invocant; # return the list when indexed with Void
             } else {
-                $left[$right];
+                $invocant[$arg];
             }
         } else {
-            if pir::typeof($left) eq 'Sub' && $left.arity == 2 {
+            if pir::typeof($invocant) eq 'Sub' && $invocant.arity == 2 {
                 # auto-curry functions of two arguments
                 return sub ($third) {
                   Q:PIR {
-                      $P0 = find_lex "$left"
-                      $P1 = find_lex "$right"
+                      $P0 = find_lex "$invocant"
+                      $P1 = find_lex "$arg"
                       $P2 = find_lex "$third"
                       $P3 = $P0($P1, $P2)
                       .return($P3)
@@ -22,8 +23,8 @@
                 }
             } else {
               Q:PIR {
-                  $P0 = find_lex "$left"
-                  $P1 = find_lex "$right"
+                  $P0 = find_lex "$invocant"
+                  $P1 = find_lex "$arg"
                   $P2 = $P0($P1)
                   .return($P2)
               }
