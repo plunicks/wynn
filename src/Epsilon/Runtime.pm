@@ -58,6 +58,8 @@
       set_hll_global '<', $P0
       $P0 = get_hll_global '&infix:<>>'
       set_hll_global '>', $P0
+      $P0 = get_hll_global '&infix:<<>>'
+      set_hll_global '<>', $P0
       $P0 = get_hll_global '&infix:<<=>'
       set_hll_global '<=', $P0
       $P0 = get_hll_global '&infix:<>=>'
@@ -178,6 +180,12 @@ sub &infix:«<»  ($left, $right) {
 sub &infix:«>»  ($left, $right) {
     pir::does($left, 'string') || pir::does($right, 'string')
         ?? $left gt $right !! $left > $right
+}
+
+sub &infix:«<>»  ($left, $right) {
+    pir::does($left, 'string') || pir::does($right, 'string')
+        ?? ($left lt $right || $left gt $right)
+        !! ($left < $right || $left > $right)
 }
 
 sub &infix:«<=» ($left, $right) {

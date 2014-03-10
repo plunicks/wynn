@@ -102,6 +102,7 @@ token infix:sym<~>  { <sym> <O('%additive')> }
 
 token infix:sym«<»  { <sym> <O('%comparative, :pasttype<chain>')> }
 token infix:sym«>»  { <sym> <O('%comparative, :pasttype<chain>')> }
+token infix:sym«<>» { <sym> <O('%comparative, :pasttype<chain>')> }
 token infix:sym«<=» { <sym> <O('%comparative, :pasttype<chain>')> }
 token infix:sym«>=» { <sym> <O('%comparative, :pasttype<chain>')> }
 token infix:sym«==» { <sym> <O('%comparative, :pasttype<chain>')> }
