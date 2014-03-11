@@ -94,6 +94,8 @@
       set_hll_global '$', $P0
       $P0 = get_hll_global '&infix:<=>>'
       set_hll_global '=>', $P0
+      $P0 = get_hll_global '&infix:<=|>'
+      set_hll_global '=|', $P0
       $P0 = get_hll_global '&infix:<;>'
       set_hll_global ';', $P0
       $P0 = get_hll_global '&infix:<.>'
@@ -278,6 +280,31 @@ sub &infix:«=>»($key, $value) {
     my %hash;
     %hash{$key} := $value;
     %hash;
+}
+
+sub &infix:«=|»($left, $right) {
+    if ! pir::does($left, 'hash') && ! pir::defined($left) {
+        $left := pir::new('Hash');
+    }
+
+  Q:PIR {
+      .local pmc left, right, it, key, value
+      left = find_lex "$left"
+      right = find_lex "$right"
+
+      ## add right's keys to left
+      ## (overwrite existing values if the keys exist in left already)
+      it = iter right
+    loop:
+      unless it goto done
+      $P0 = shift it
+      $P1 = $P0.'key'()
+      $P2 = $P0.'value'()
+      left[$P1] = $P2
+      goto loop
+    done:
+      .return(left)
+  };
 }
 
 sub &infix:<;>($left, $right) {
