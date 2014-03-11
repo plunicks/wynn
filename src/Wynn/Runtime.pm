@@ -29,6 +29,20 @@
             } else {
                 $invocant[$arg];
             }
+        } elsif pir::does($invocant, 'hash') {
+            if pir::typeof($arg) eq 'Void' {
+                $invocant; # return the hash when indexed with Void
+            } elsif pir::does($arg, 'array') {
+                # index a hash with a list: return a list of the
+                # selected elements
+                my $result := [];
+                for $arg {
+                    $result.push($invocant{$_});
+                }
+                $result;
+            } else {
+                $invocant{$arg};
+            }
         } elsif pir::isa($invocant, 'Class') &&
             !pir::isa($invocant, 'Object') {
             pir::new($invocant);
