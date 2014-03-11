@@ -275,7 +275,9 @@ sub &infix:<$> ($left, $right) {
 }
 
 sub &infix:«=>»($key, $value) {
-    return ($key, $value);
+    my %hash;
+    %hash{$key} := $value;
+    %hash;
 }
 
 sub &infix:<;>($left, $right) {
