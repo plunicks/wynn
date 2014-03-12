@@ -1,6 +1,29 @@
+## Utility Functions used in the implementation of other functions
+
+sub __hash_merge ($left, $right) {
+  Q:PIR {
+      .local pmc left, right, it, key, value
+      left = find_lex "$left"
+      right = find_lex "$right"
+
+      ## add right's keys to left
+      ## (overwrite existing values if the keys exist in left already)
+      it = iter right
+    loop:
+      unless it goto done
+      $P0 = shift it
+      $P1 = $P0.'key'()
+      $P2 = $P0.'value'()
+      left[$P1] = $P2
+      goto loop
+    done:
+      .return(left)
+  };
+}
+
 ## Function Calls
 
-{
+INIT {
     my sub __call ($invocant, $arg) {
         if pir::typeof($invocant) eq 'Void' {
             $invocant; # return Void when Void is called/indexed
@@ -179,6 +202,10 @@ sub &infix:<@> ($left, $right) {
   }
 }
 
+sub &infix:<|> ($left, $right) {
+    __hash_merge($left, $right);
+}
+
 sub &infix:<*> ($left, $right) {
     if pir::typeof($right) eq 'Void' {
         $left;
@@ -301,24 +328,7 @@ sub &infix:«=|»($left, $right) {
         $left := pir::new('Hash');
     }
 
-  Q:PIR {
-      .local pmc left, right, it, key, value
-      left = find_lex "$left"
-      right = find_lex "$right"
-
-      ## add right's keys to left
-      ## (overwrite existing values if the keys exist in left already)
-      it = iter right
-    loop:
-      unless it goto done
-      $P0 = shift it
-      $P1 = $P0.'key'()
-      $P2 = $P0.'value'()
-      left[$P1] = $P2
-      goto loop
-    done:
-      .return(left)
-  };
+    __hash_merge($left, $right);
 }
 
 sub &infix:<;>($left, $right) {
