@@ -411,7 +411,8 @@ sub dump ($arg) {
       load_bytecode 'dumper.pbc'
       $P1 = get_root_global ['parrot'], '_dumper'
       $P1($P0)
-  }
+  };
+    pir::new('Void');
 }
 
 sub typeof ($arg) { pir::typeof($arg) }
