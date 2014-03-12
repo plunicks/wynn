@@ -56,7 +56,7 @@ method function_call($/) {
     my $past := $<invocant>.ast;
 
     for $<factor> {
-        $past := PAST::Op.new($past, $_.ast, :pasttype<call>, :name('!call'),
+        $past := PAST::Op.new($past, $_.ast, :pasttype<call>, :name<__call>,
                               :node($/));
     }
 

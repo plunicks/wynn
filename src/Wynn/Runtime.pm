@@ -23,74 +23,97 @@ sub __hash_merge ($left, $right) {
 
 ## Function Calls
 
-INIT {
-    my sub __call ($invocant, $arg) {
-        if pir::typeof($invocant) eq 'Void' {
-            $invocant; # return Void when Void is called/indexed
-        } elsif pir::does($invocant, 'array') ||
-            pir::does($invocant, 'string') {
-            if pir::typeof($arg) eq 'Void' {
-                $invocant; # return the list when indexed with Void
-            } elsif pir::does($arg, 'array') {
-                if pir::does($invocant, 'array') {
-                    # index a list with a list: return a list of the
-                    # selected elements
-                    my $result := [];
-                    for $arg {
-                        $result.push($invocant[$_]);
-                    }
-                    $result;
-                } else {
-                    # index a string with a list: return a string of the
-                    # selected characters
-                    my $result := '';
-                    for $arg {
-                        $result := $result ~ $invocant[$_];
-                    }
-                    $result;
-                }
-            } else {
-                $invocant[$arg];
-            }
-        } elsif pir::does($invocant, 'hash') {
-            if pir::typeof($arg) eq 'Void' {
-                $invocant; # return the hash when indexed with Void
-            } elsif pir::does($arg, 'array') {
-                # index a hash with a list: return a list of the
+sub __call ($invocant, $arg) {
+    if pir::typeof($invocant) eq 'Void' {
+        $invocant; # return Void when Void is called/indexed
+    } elsif pir::does($invocant, 'array') ||
+        pir::does($invocant, 'string') {
+        if pir::typeof($arg) eq 'Void' {
+            $invocant; # return the list when indexed with Void
+        } elsif pir::does($arg, 'array') {
+            if pir::does($invocant, 'array') {
+                # index a list with a list: return a list of the
                 # selected elements
                 my $result := [];
                 for $arg {
-                    $result.push($invocant{$_});
+                    $result.push($invocant[$_]);
                 }
                 $result;
             } else {
-                $invocant{$arg};
+                # index a string with a list: return a string of the
+                # selected characters
+                my $result := '';
+                for $arg {
+                    $result := $result ~ $invocant[$_];
+                }
+                $result;
             }
-        } elsif pir::isa($invocant, 'Class') &&
-            !pir::isa($invocant, 'Object') {
-            pir::new($invocant);
         } else {
-            if pir::typeof($invocant) ne 'CurriedSub' &&
-                pir::can($invocant, 'arity') && $invocant.arity > 1 {
-                # auto-curry functions of more than one argument
-                my $csub := pir::new('CurriedSub');
-                $csub.set_sub($invocant);
-                $invocant := $csub;
-            }
-
-          Q:PIR {
-              $P0 = find_lex "$invocant"
-              $P1 = find_lex "$arg"
-              $P2 = $P0($P1)
-              .return($P2)
-          }
+            $invocant[$arg];
         }
+    } elsif pir::does($invocant, 'hash') {
+        if pir::typeof($arg) eq 'Void' {
+            $invocant; # return the hash when indexed with Void
+        } elsif pir::does($arg, 'array') {
+            # index a hash with a list: return a list of the
+            # selected elements
+            my $result := [];
+            for $arg {
+                $result.push($invocant{$_});
+            }
+            $result;
+        } else {
+            $invocant{$arg};
+        }
+    } elsif pir::isa($invocant, 'Class') &&
+        !pir::isa($invocant, 'Object') {
+        pir::new($invocant);
+    } else {
+        if pir::typeof($invocant) ne 'CurriedSub' &&
+            pir::can($invocant, 'arity') && $invocant.arity > 1 {
+            # auto-curry functions of more than one argument
+            my $csub := pir::new('CurriedSub');
+            $csub.set_sub($invocant);
+            $invocant := $csub;
+        }
+
+      Q:PIR {
+          $P0 = find_lex "$invocant"
+          $P1 = find_lex "$arg"
+          $P2 = $P0($P1)
+          .return($P2)
+      }
+    }
+}
+
+class CurriedSub is Sub {
+    has $sub;
+    has @args;
+    method arity () { $sub.arity - +@args }
+
+    method set_sub ($s) {
+        $sub := $s;
+        @args := ();
     }
 
-  Q:PIR {
-      $P0 = find_lex '__call'
-      set_global '!call', $P0
+    method ($arg) is pirflags<:vtable('invoke')> {
+        @args.push($arg);
+        if (self.arity == 0) {
+            return $sub(|@args);
+        } else {
+            return self;
+        }
+    }
+}
 
+# declare the class Sub so CurriedSub can subclass it.
+# defined internally in Parrot.
+class Sub {}
+
+## Operators as Functions
+
+INIT {
+  Q:PIR {
       # Short names for all infix operators.
       # Note that Parrot wraps all these operator symbols in <> when
       # generating sub names even though some of them contain '<' or '>':
@@ -139,30 +162,6 @@ INIT {
       set_hll_global '.', $P0
   }
 }
-
-class CurriedSub is Sub {
-    has $sub;
-    has @args;
-    method arity () { $sub.arity - +@args }
-
-    method set_sub ($s) {
-        $sub := $s;
-        @args := ();
-    }
-
-    method ($arg) is pirflags<:vtable('invoke')> {
-        @args.push($arg);
-        if (self.arity == 0) {
-            return $sub(|@args);
-        } else {
-            return self;
-        }
-    }
-}
-
-# declare the class Sub so CurriedSub can subclass it.
-# defined internally in Parrot.
-class Sub {}
 
 ## Operators
 sub &postfix:<!> ($expr) {
