@@ -414,6 +414,8 @@ sub dump ($arg) {
   }
 }
 
+sub typeof ($arg) { pir::typeof($arg) }
+
 sub load ($module) {
   Q:PIR {
       .local pmc module, compiler, result
