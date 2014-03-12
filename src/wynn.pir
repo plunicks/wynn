@@ -39,6 +39,7 @@ object.
     parrotns.'export_to'(hllns, imports)
 .end
 
+.include 'src/classes/Object.pir'
 .include 'src/gen_grammar.pir'
 .include 'src/gen_actions.pir'
 .include 'src/gen_compiler.pir'
