@@ -40,6 +40,7 @@ object.
 .end
 
 .include 'src/classes/Object.pir'
+.include 'src/classes/Function.pir'
 .include 'src/classes/Hash.pir'
 .include 'src/classes/List.pir'
 .include 'src/gen_grammar.pir'
