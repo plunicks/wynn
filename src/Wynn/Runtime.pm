@@ -431,6 +431,32 @@ sub new ($class) {
     pir::new($class);
 }
 
+sub caller ($level?) {
+    # default to 1 (the immediate caller of the caller of caller())
+    $level := 1 if ! pir::defined($level);
+
+    # add 2 to $level because there are two lexical scopes from here to the
+    # caller - the __call function and this function. negative values of
+    # $level can be passed to obtain those scopes' LexPads
+    $level := $level + 2;
+
+  Q:PIR {
+      .local pmc level, lexpad
+      level = find_lex "$level"
+      $P0 = getinterp
+      # if there is no such caller depth, this throws an exception:
+      lexpad = $P0["lexpad"; level]
+
+      # if lexpad is null, the given scope has no LexPad - return Undef
+      #unless_null lexpad, done
+      unless_null lexpad, done
+      lexpad = new 'Undef'
+
+    done:
+      .return(lexpad)
+  }
+}
+
 ## Library Functions
 
 # function -> list -> list
