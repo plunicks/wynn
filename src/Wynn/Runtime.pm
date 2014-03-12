@@ -278,13 +278,13 @@ sub &infix:«!=» ($left, $right) {
 }
 
 sub &infix:<,>(*@args) {
-    my @result := ();
+    my $result := pir::new('List');
     for @args {
         if pir::typeof($_) ne 'Void' {
-            @result.push($_)
+            $result.push($_)
         }
     }
-    return @result;
+    return $result;
 }
 
 sub &infix:«>>»($left, $right) {

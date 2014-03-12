@@ -73,6 +73,7 @@ src/gen_actions.pir
 src/gen_compiler.pir
 src/gen_grammar.pir
 src/gen_runtime.pir
+src/classes/List.pir
 src/classes/Object.pir
 SOURCES
     $S0 = pop $P6
