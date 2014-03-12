@@ -86,7 +86,7 @@ sub __call ($invocant, $arg) {
     }
 }
 
-class CurriedSub is Sub {
+class CurriedSub {
     has $sub;
     has @args;
     method arity () { $sub.arity - +@args }
@@ -105,10 +105,6 @@ class CurriedSub is Sub {
         }
     }
 }
-
-# declare the class Sub so CurriedSub can subclass it.
-# defined internally in Parrot.
-class Sub {}
 
 ## Operators as Functions
 
