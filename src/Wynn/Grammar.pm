@@ -58,6 +58,7 @@ INIT {
     Wynn::Grammar.O(':prec<n>, :assoc<unary>', '%unary-negative');
     Wynn::Grammar.O(':prec<n>, :assoc<unary>', '%unary-not');
     Wynn::Grammar.O(':prec<m>, :assoc<left>',  '%applicative');
+    Wynn::Grammar.O(':prec<l>, :assoc<left>',  '%function-composition');
     Wynn::Grammar.O(':prec<k>, :assoc<left>',  '%combining-or');
     Wynn::Grammar.O(':prec<e>, :assoc<left>',  '%multiplicative');
     Wynn::Grammar.O(':prec<d>, :assoc<left>',  '%additive');
@@ -89,6 +90,8 @@ token prefix:sym<-> { <sym> <O('%unary-negative')> }
 token prefix:sym<¬> { <sym> <O('%unary-not')> }
 
 token infix:sym<@>  { <sym> <O('%applicative')> }
+
+token infix:sym<∘>  { <sym> <O('%function-composition')> }
 
 token infix:sym<|>  { <sym> <O('%combining-or')> }
 

@@ -308,6 +308,14 @@ sub &infix:«<<»($left, $right) {
     }
 }
 
+sub &infix:<∘> ($left, $right) {
+    sub ($arg) {
+        # use __call here so that this operator will work on lists and other
+        # maps, not just functions
+        __call($left, __call($right, $arg));
+    };
+}
+
 sub &infix:<$> ($left, $right) {
   Q:PIR {
       $P0 = find_lex "$left"
