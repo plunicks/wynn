@@ -35,11 +35,12 @@ object.
     .local pmc hllns, parrotns, imports
     hllns = get_hll_namespace
     parrotns = get_root_namespace ['parrot']
-    imports = split ' ', 'PAST PCT HLL Regex Hash'
+    imports = split ' ', 'PAST PCT HLL Regex'
     parrotns.'export_to'(hllns, imports)
 .end
 
 .include 'src/classes/Object.pir'
+.include 'src/classes/Hash.pir'
 .include 'src/classes/List.pir'
 .include 'src/gen_grammar.pir'
 .include 'src/gen_actions.pir'
