@@ -427,6 +427,10 @@ sub load ($module) {
   }
 }
 
+sub new ($class) {
+    pir::new($class);
+}
+
 ## Library Functions
 
 # function -> list -> list
