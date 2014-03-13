@@ -149,7 +149,7 @@ token infix:sym<;>  { <sym> <O('%sequencing')> }
 ## Terms
 
 rule function_call {
-    <invocant> [ <factor> <.ws> ]+
+    <invocant> [ <factor> ]+
 }
 
 rule term:sym<function_call> {
