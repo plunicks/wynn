@@ -21,6 +21,46 @@ sub __hash_merge ($left, $right) {
   };
 }
 
+sub __get_namespace_array ($namespace, $hll_relative?) {
+  Q:PIR {
+      .local pmc namespace
+      .local int hll_relative
+      namespace = find_lex "$namespace"
+      $P0 = find_lex "$hll_relative"
+      hll_relative = $P0
+
+      $I0 = does namespace, 'array'
+      if $I0, have_array
+
+      $I0 = isa namespace, 'NameSpace'
+      if $I0, have_namespace
+
+      $I0 = isa namespace, 'Void'
+      if $I0, have_void
+
+      # assume we have a string and parse it as a name
+      .local pmc compiler
+      $S0 = namespace
+      compiler = compreg 'Wynn'
+      namespace = compiler.'parse_name'($S0)
+      goto have_array
+
+    have_void:
+      namespace = new 'ResizableStringArray'
+      goto have_array
+
+    have_namespace:
+      $P0 = namespace.'get_name'()
+      unless hll_relative, have_namespace_array
+      $P0.'shift'() # remove the HLL component of the name
+    have_namespace_array:
+      namespace = $P0
+
+    have_array:
+      .return(namespace)
+  }
+}
+
 ## Function Calls
 
 sub __call ($invocant, $arg) {
@@ -113,6 +153,10 @@ INIT {
       # Short names for all infix operators.
       # Note that Parrot wraps all these operator symbols in <> when
       # generating sub names even though some of them contain '<' or '>':
+      $P0 = get_hll_global '&infix:<:>'
+      set_hll_global ':', $P0
+      $P0 = get_hll_global '&infix:<:^>'
+      set_hll_global ':^', $P0
       $P0 = get_hll_global '&infix:<@>'
       set_hll_global '@', $P0
       $P0 = get_hll_global '&infix:<*>'
@@ -160,6 +204,43 @@ INIT {
 }
 
 ## Operators
+# Lookup a name in a namespace.
+# The namespace argument can be an array, a NameSpace, Void, or a string.
+sub &infix:<:> ($namespace, $name) {
+    $namespace := __get_namespace_array($namespace, 1);
+
+  Q:PIR {
+      .local pmc namespace, result
+      .local string name
+      namespace = find_lex "$namespace"
+      $P0 = find_lex "$name"
+      name = $P0
+
+      result = get_hll_global namespace, name
+
+      .return(result)
+  }
+}
+
+# Lookup a name in a true root namespace.
+# This can access the root parrot namespace and other languages's namespaces.
+# The namespace argument can be an array, a NameSpace, Void, or a string.
+sub &infix:<:^> ($namespace, $name) {
+    $namespace := __get_namespace_array($namespace, 0);
+
+  Q:PIR {
+      .local pmc namespace, result
+      .local string name
+      namespace = find_lex "$namespace"
+      $P0 = find_lex "$name"
+      name = $P0
+
+      result = get_root_global namespace, name
+
+      .return(result)
+  }
+}
+
 sub &postfix:<!> ($expr) {
   Q:PIR {
       $P0 = find_lex "$expr"

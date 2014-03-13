@@ -52,6 +52,7 @@ token void { }
 ## Operators
 
 INIT {
+    Wynn::Grammar.O(':prec<z>, :assoc<left>',  '%namespace-lookup');
     Wynn::Grammar.O(':prec<q>, :assoc<unary>', '%member');
     Wynn::Grammar.O(':prec<p>, :assoc<unary>', '%unary-applicative');
     Wynn::Grammar.O(':prec<o>, :assoc<unary>', '%unary-count');
@@ -81,6 +82,9 @@ token postfix:sym<!> {
     <sym> <!before '='> # don't match in '!='
     <O('%unary-applicative')>
 }
+
+token infix:sym<:>  { <sym> <O('%namespace-lookup')> }
+token infix:sym<:^> { <sym> <O('%namespace-lookup')> }
 
 token prefix:sym('#') { <sym> <O('%unary-count')> }
 
@@ -148,8 +152,11 @@ token infix:sym<;>  { <sym> <O('%sequencing')> }
 
 ## Terms
 
-rule function_call {
-    <invocant=factor> [ <argument=factor> ]*
+# don't match foo:bar (namespace-lookup), but match foo :bar
+token function_call {
+    <invocant=factor> [
+    [ <?before <[\s]> ':'> || <!before ':'> ]
+      <.ws> <argument=factor> ]*
 }
 
 rule term:sym<function_call> {
