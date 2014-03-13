@@ -538,6 +538,28 @@ sub caller ($level?) {
   }
 }
 
+sub get_namespace ($namespace) {
+    $namespace := __get_namespace_array($namespace, 1);
+
+  Q:PIR {
+      .local pmc namespace_array, namespace_obj
+      namespace_array = find_lex "$namespace"
+      namespace_obj = get_namespace namespace_array
+      .return(namespace_obj)
+  }
+}
+
+sub get_namespace_root ($namespace) {
+    $namespace := __get_namespace_array($namespace, 0);
+
+  Q:PIR {
+      .local pmc namespace_array, namespace_obj
+      namespace_array = find_lex "$namespace"
+      namespace_obj = get_root_namespace namespace_array
+      .return(namespace_obj)
+  }
+}
+
 ## Library Functions
 
 # function -> list -> list

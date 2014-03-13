@@ -155,7 +155,7 @@ token infix:sym<;>  { <sym> <O('%sequencing')> }
 # don't match foo:bar (namespace-lookup), but match foo :bar
 token function_call {
     <invocant=factor> [
-    [ <?before <[\s]> ':'> || <!before ':'> ]
+    [ <?before <[\s]>+ ':'> || <!before ':'> ]
       <.ws> <argument=factor> ]*
 }
 
