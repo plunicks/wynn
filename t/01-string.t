@@ -1,4 +1,4 @@
-print $ "1..35\n";
+print $ "1..37\n";
 
 ok = load 'Test';
 
@@ -74,6 +74,8 @@ ok ("f\{f = arg1 -> arg2 -> {
 
 # indexing a string (substring)
 ok $ 'bar' 2 == 'r';
+ok $ 'bar' (0, 1, 2) 2 == 'r';
 ok $ "abcdefghi" 4 == "e";
+ok $ "abcdefghi" (4, 5, 6, 7, 8) 4 == "i";
 
 1
