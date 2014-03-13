@@ -149,15 +149,11 @@ token infix:sym<;>  { <sym> <O('%sequencing')> }
 ## Terms
 
 rule function_call {
-    <invocant> [ <factor> ]+
+    <invocant=factor> [ <argument=factor> ]*
 }
 
 rule term:sym<function_call> {
     <function_call>
-}
-
-rule term:sym<factor> {
-    <factor>
 }
 
 ## Factors
@@ -255,39 +251,3 @@ token quote_escape:sym<interpolation> {
         ]
     [ '}' || <.panic: "Expected '}' in string interpolation"> ]
 }
-
-## Invocants
-
-proto token invocant { <...> }
-
-token invocant:sym<variable> {
-    <variable>
-}
-
-token invocant:sym<( )> {
-    '(' <.ws> <expression> [ ')' || <.panic: "Expected ')'"> ]
-}
-
-token invocant:sym<{ }> {
-    '{' <!before '{'>
-        <.begin_block>
-        <.ws> <expression>
-    [ '}' || <.panic: "Expected '}'"> ]
-}
-
-rule invocant:sym<[ ]> {
-    '['
-        <.begin_function>
-        <class_body>
-    [ ']' || <.panic: "Expected ']'"> ]
-}
-
-token invocant:sym<.> {
-    <object_variable>
-}
-
-token invocant:sym<integer> { <sign>? <integer> <!before '.'> }
-token invocant:sym<float> {
-    <sign>? [ \d+ '.' \d* | \d* '.' \d+ ]
-}
-token invocant:sym<quote> { <?[\']> $<quote>=<quote_EXPR: ':q'> }
