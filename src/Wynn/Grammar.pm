@@ -140,7 +140,8 @@ token infix:sym«=>» {
     <sym> <O('%pair')>
 }
 
-token infix:sym<=>  { <sym> <O('%assign, :pasttype<bind>')> }
+token infix:sym<:=> { <sym> <O('%assign, :pasttype<bind>')> }
+token infix:sym<=>  { <sym> <O('%assign, :pasttype<copy>')> }
 
 token infix:sym<=|> { <sym> <O('%assign-map')> }
 
