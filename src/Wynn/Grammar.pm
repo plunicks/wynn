@@ -172,7 +172,7 @@ token factor:sym<( )> {
 }
 
 token factor:sym<{ }> {
-    '{' <!before '{'>
+    '{'
         <.begin_block>
         <.ws> <expression>
     [ '}' || <.panic: "Expected '}'"> ]
