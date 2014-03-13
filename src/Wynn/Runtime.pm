@@ -155,8 +155,8 @@ INIT {
       # generating sub names even though some of them contain '<' or '>':
       $P0 = get_hll_global '&infix:<:>'
       set_hll_global ':', $P0
-      $P0 = get_hll_global '&infix:<:^>'
-      set_hll_global ':^', $P0
+      $P0 = get_hll_global '&infix:<::>'
+      set_hll_global '::', $P0
       $P0 = get_hll_global '&infix:<@>'
       set_hll_global '@', $P0
       $P0 = get_hll_global '&infix:<*>'
@@ -225,7 +225,7 @@ sub &infix:<:> ($namespace, $name) {
 # Lookup a name in a true root namespace.
 # This can access the root parrot namespace and other languages's namespaces.
 # The namespace argument can be an array, a NameSpace, Void, or a string.
-sub &infix:<:^> ($namespace, $name) {
+sub &infix:<::> ($namespace, $name) {
     $namespace := __get_namespace_array($namespace, 0);
 
   Q:PIR {

@@ -84,7 +84,7 @@ token postfix:sym<!> {
 }
 
 token infix:sym<:>  { <sym> <O('%namespace-lookup')> }
-token infix:sym<:^> { <sym> <O('%namespace-lookup')> }
+token infix:sym<::> { <sym> <!before <identifier>> <O('%namespace-lookup')> }
 
 token prefix:sym('#') { <sym> <O('%unary-count')> }
 
