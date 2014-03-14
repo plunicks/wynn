@@ -111,7 +111,7 @@ method factor:sym<parameter>($/) {
     $?BLOCK.symbol($name, :scope<parameter>);
 
     $past.scope('parameter');
-    $past.viviself('Undef');
+    $past.viviself('Undef') if $<optional>;
 
     make $past;
 }
