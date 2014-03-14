@@ -511,7 +511,16 @@ sub callmethod ($object, $method, $arg) {
       $P0 = find_lex "$method"
       method = $P0
       arg = find_lex "$arg"
+
+      $I0 = isa arg, 'Void'
+      if $I0, no_arg
       result = object.method(arg)
+      goto end
+
+    no_arg:
+      result = object.method()
+
+    end:
       .return(result)
   };
 }
