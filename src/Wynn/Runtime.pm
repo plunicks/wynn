@@ -144,6 +144,23 @@ class CurriedSub {
             return self;
         }
     }
+
+    method () is pirflags<:vtable('get_string')> {
+        my @params;
+
+        my $i := 0;
+        while $i < $sub.arity {
+            @params.push('_');
+            $i := $i + 1;
+        }
+
+        my $str := '(' ~ pir::join(' -> ', @params) ~ ' -> ...)';
+        for @args {
+            $str := $str ~ ' ' ~ $_;
+        }
+
+        return $str;
+    }
 }
 
 ## Operators as Functions
