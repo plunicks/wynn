@@ -61,6 +61,8 @@ sub __get_namespace_array ($namespace, $hll_relative?) {
   }
 }
 
+sub __hash (*%args) { %args; }
+
 ## Function Calls
 
 sub __call ($invocant, $arg) {
@@ -107,7 +109,15 @@ sub __call ($invocant, $arg) {
         }
     } elsif pir::isa($invocant, 'Class') &&
         !pir::isa($invocant, 'Object') {
-        pir::new($invocant);
+        my $object := pir::new($invocant);
+
+        # initialize instance variables from the class definition
+        my $namespace := $invocant.get_namespace();
+        for $namespace {
+            pir::setattribute($object, ~$_, $namespace{$_});
+        }
+
+        $object;
     } else {
         if pir::typeof($invocant) ne 'CurriedSub' &&
             pir::can($invocant, 'arity') && $invocant.arity > 1 {
@@ -450,11 +460,13 @@ sub &circumfix:<[ ]> ($body) {
         $?CURRENT_CLASS_ID := $?CURRENT_CLASS_ID + 1;
     }
     my $name := "_class$?CURRENT_CLASS_ID";
+    my $namespace := __get_namespace_array($name);
 
   Q:PIR {
-      .local pmc name, body, class, lexinfo, it
+      .local pmc name, body, class, it, namespace
       name = find_lex "$name"
       body = find_lex "$body"
+      namespace = find_lex "$namespace"
 
       # if the class exists, then we'll add to it; else create it:
       class = get_class name
@@ -462,18 +474,46 @@ sub &circumfix:<[ ]> ($body) {
       class = newclass name
     got_class:
 
-      lexinfo = body.'get_lexinfo'()
-      it = iter lexinfo
+      it = iter body
     loop:
+      .local pmc value
       unless it goto done
       $P0 = shift it
       $S0 = $P0.'key'()
-      addattribute class, $S0
+      value = $P0.'value'()
 
+      $I0 = isa value, 'Sub'
+      unless $I0, not_a_sub
+      class.'add_method'($S0, value)
+
+      goto end_attribute
+
+    not_a_sub:
+      addattribute class, $S0
+      # Set a package variable by the given name in the class's package. The
+      # class package variable will be used to initialize new objects of the
+      # class.
+      set_hll_global namespace, $S0, value
+
+    end_attribute:
       goto loop
+
     done:
       .return(class)
   }
+}
+
+sub callmethod ($object, $method, $arg) {
+  Q:PIR {
+      .local pmc object, arg, result
+      .local string method
+      object = find_lex "$object"
+      $P0 = find_lex "$method"
+      method = $P0
+      arg = find_lex "$arg"
+      result = object.method(arg)
+      .return(result)
+  };
 }
 
 sub &infix:<.> ($object, $member) {

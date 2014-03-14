@@ -2,7 +2,7 @@ class := [ x ; y ; bar ];
 f = class ();
 f.x = 2;
 f.y = 5;
-print $ "1.." ~ (f.y - f.x + 8) ~ "\n";
+print $ "1.." ~ (f.y - f.x + 11) ~ "\n";
 
 ok = load 'Test';
 
@@ -42,4 +42,17 @@ ok $ f20.x == 20;
 ok $ f21.x == 21;
 ok $ f30.x == 30;
 
+Cow := [
+    name;
+    hoofs = 4;
+    moo = (self, x -> "moo, \{x}!")
+];
+
+cow = Cow ();
+cow.name = "Jane";
+
+ok $ (callmethod cow "moo" "foo") == "moo, foo!";
+ok $ cow.hoofs == 4;
+ok $ "The cow \{cow.name} has \{cow.hoofs} hoofs."
+     == "The cow Jane has 4 hoofs."
 ()

@@ -215,13 +215,16 @@ token factor:sym<symbol> {
 # class definition
 rule factor:sym<[ ]> {
     '['
-        <.begin_function>
         <class_body>
     [ ']' || <.panic: "Expected ']'"> ]
 }
 
 rule class_body {
-    <variable> ** ';'
+    <member_def> ** ';'
+}
+
+rule member_def {
+    <identifier> [ '=' $<expression>=<factor> ]?
 }
 
 token factor:sym<.> {

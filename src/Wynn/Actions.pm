@@ -186,24 +186,23 @@ method factor:sym<[ ]>($/) {
 }
 
 method class_body($/) {
-    our @?BLOCK;
-    our $?BLOCK;
+    my $past := PAST::Op.new(:pasttype<call>, :name<__hash>, :node($/));
 
-    my $past := $?BLOCK;
-
-    for $<variable> {
-        my $var := $_.ast;
-        $past.symbol($var.name, :scope<lexical>);
-
-        $var.scope('lexical');
-        $var.isdecl(1);
-        $var.viviself('Undef');
-        $past.push($var);
+    for $<member_def> {
+        $past.push($_.ast);
     }
 
-    @?BLOCK.shift;
-    $?BLOCK := @?BLOCK[0];
+    make $past;
+}
 
+method member_def($/) {
+    my $past;
+    if $<expression> {
+        $past := $<expression>[0].ast;
+    } else {
+        $past := PAST::Val.new(:value(0), :returns<Undef>, :node($/));
+    }
+    $past.named($<identifier>.ast);
     make $past;
 }
 
