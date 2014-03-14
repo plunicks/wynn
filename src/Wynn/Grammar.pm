@@ -195,8 +195,12 @@ token variable {
     <identifier>
 }
 
-token factor:sym<parameter> {
-    <variable> [ $<optional>='?' ]? <?before <.ws> '->'>
+token parameter {
+    <variable> [ $<optional>='?' ]?
+}
+
+rule factor:sym<parameters> {
+    <parameter> ** ',' <?before '->'>
 }
 
 token factor:sym<variable> {

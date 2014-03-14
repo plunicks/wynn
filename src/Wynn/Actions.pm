@@ -103,15 +103,24 @@ method variable($/) {
     make PAST::Var.new(:name($<identifier>.ast), :node($/));
 }
 
-method factor:sym<parameter>($/) {
-    my $past := $<variable>.ast;
-    my $name := $past.name;
+method parameter($/) {
+    make $<variable>.ast;
+}
+
+method factor:sym<parameters>($/) {
+    my $past := PAST::Node.new(:node($/));
 
     our $?BLOCK;
-    $?BLOCK.symbol($name, :scope<parameter>);
 
-    $past.scope('parameter');
-    $past.viviself('Undef') if $<optional>;
+    for $<parameter> {
+        my $param := $_.ast;
+        $past.push($param);
+
+        $?BLOCK.symbol($param.name, :scope<parameter>);
+
+        $param.scope('parameter');
+        $param.viviself('Undef') if $_<optional>;
+    }
 
     make $past;
 }
