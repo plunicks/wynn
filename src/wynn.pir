@@ -39,6 +39,7 @@ object.
     parrotns.'export_to'(hllns, imports)
 .end
 
+.include 'src/WAST/Compiler.pir'
 .include 'src/classes/Object.pir'
 .include 'src/classes/Function.pir'
 .include 'src/classes/Hash.pir'
@@ -51,6 +52,17 @@ object.
 =back
 
 =cut
+
+.namespace [ 'WAST';'Op' ]
+
+.sub 'onload' :anon :load :init
+    .local pmc p6meta
+    p6meta = new 'P6metaclass'
+    p6meta.'new_class'('WAST::Op', 'parent'=>'PAST::Op')
+
+    .return ()
+.end
+
 
 # Local Variables:
 #   mode: pir

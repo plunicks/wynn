@@ -10,6 +10,16 @@ INIT {
     Wynn::Compiler.init_library_path;
 }
 
+method post ($source, *%adverbs) {
+  Q:PIR {
+    .param pmc source
+    .param pmc adverbs         :slurpy :named
+    $P0 = compreg 'WAST'
+    .tailcall $P0.'to_post'(source, adverbs :flat :named)
+  };
+}
+
+
 method load_library ($name, *$extra) {
     my $namelist := self.parse_name($name);
 

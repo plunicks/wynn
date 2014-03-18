@@ -64,6 +64,7 @@ No Configure step, no Makefile generated.
     $P4['src/gen_compiler.pir'] = 'src/Wynn/Compiler.pm'
     $P4['src/gen_grammar.pir'] = 'src/Wynn/Grammar.pm'
     $P4['src/gen_runtime.pir'] = 'src/Wynn/Runtime.pm'
+    $P4['src/WAST/Compiler.pir'] = 'src/WAST/Compiler.pm'
     $P0['pir_nqp-rx'] = $P4
 
     $P5 = new 'Hash'
@@ -73,6 +74,7 @@ src/gen_actions.pir
 src/gen_compiler.pir
 src/gen_grammar.pir
 src/gen_runtime.pir
+src/WAST/Compiler.pir
 src/classes/Function.pir
 src/classes/Hash.pir
 src/classes/List.pir
