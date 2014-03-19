@@ -50,6 +50,14 @@ method begin_function($/) {
     @?BLOCK.unshift($?BLOCK);
 }
 
+method infix:sym<:=>($/) {
+    make WAST::Op.new(:pasttype<bind_list>, :node($/));
+}
+
+method infix:sym<=>($/) {
+    make WAST::Op.new(:pasttype<copy_list>, :node($/));
+}
+
 ## Terms
 
 method function_call($/) {
