@@ -574,6 +574,42 @@ sub load ($module) {
   }
 }
 
+sub import ($module, $imports) {
+  Q:PIR {
+      .local pmc module, imports
+      .local pmc compiler, namelist, hllns, ns
+
+      module = find_lex "$module"
+      imports = find_lex "$imports"
+
+      $P0 = find_lex "$arg"
+
+      compiler = compreg 'Wynn'
+      namelist = compiler.'parse_name'(module)
+
+      .local string filename
+      filename = join '/', namelist
+      filename = concat filename, '.pbc'
+      load_bytecode filename
+      namelist.'unshift'('parrot')
+      ns = get_root_namespace namelist
+
+      # lookup the names and return the appropriate entries
+      .local pmc results, it, import_entry
+      .local string import_name
+      results = new 'ResizablePMCArray'
+      it = iter imports
+    loop:
+      unless it goto done
+      import_name = shift it
+      import_entry = get_root_global namelist, import_name
+      results.'push'(import_entry)
+      goto loop
+    done:
+      .return(results)
+  };
+}
+
 sub new ($class) {
     pir::new($class);
 }
