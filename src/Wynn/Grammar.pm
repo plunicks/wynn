@@ -56,6 +56,7 @@ INIT {
     Wynn::Grammar.O(':prec<q>, :assoc<unary>', '%member');
     Wynn::Grammar.O(':prec<p>, :assoc<unary>', '%unary-applicative');
     Wynn::Grammar.O(':prec<o>, :assoc<unary>', '%unary-count');
+    Wynn::Grammar.O(':prec<o>, :assoc<unary>', '%unary-flatten');
     Wynn::Grammar.O(':prec<n>, :assoc<unary>', '%unary-negative');
     Wynn::Grammar.O(':prec<n>, :assoc<unary>', '%unary-not');
     Wynn::Grammar.O(':prec<m>, :assoc<left>',  '%applicative');
@@ -87,6 +88,8 @@ token infix:sym<:>  { <sym> <O('%namespace-lookup')> }
 token infix:sym<::> { <sym> <!before <identifier>> <O('%namespace-lookup')> }
 
 token prefix:sym('#') { <sym> <O('%unary-count')> }
+
+token prefix:sym<|> { <sym> <O('%unary-flatten')> }
 
 token prefix:sym<+> { <sym> <O('%unary-negative')> }
 token prefix:sym<-> { <sym> <O('%unary-negative')> }

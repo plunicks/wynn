@@ -286,6 +286,10 @@ sub &prefix:('#') ($expr) {
     }
 }
 
+# The compiler handles «|» in cases where it's applicable.
+# In other contexts, it does nothing.
+sub &prefix:<|> ($expr) { $expr }
+
 sub &prefix:<+> ($expr) { +$expr }
 
 sub &prefix:<-> ($expr) {

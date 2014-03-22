@@ -8,11 +8,24 @@ method list_op (PAST::Op $node, :$pasttype!, *%options) {
     my @lvalues;
     my @rvalues;
 
+    my $flatten := 0;
+    if $node[1].isa('PAST::Op') && $node[1]<name> eq '&prefix:<|>' {
+        $flatten := 1;
+    }
+
     # assign each variable on the left side its corresponding value
     my $i := 0;
     while $i < @($node[0]) {
         @lvalues.push($node[0][$i]);
-        @rvalues.push($node[1][$i]);
+
+        if $flatten {
+            @rvalues.push(PAST::Op.new($node[1], $i,
+                                       :pasttype<call>, :name<__call>,
+                                       :node($node)));
+        } else {
+            @rvalues.push($node[1][$i]);
+        }
+
         $i := $i + 1;
     }
 
