@@ -210,6 +210,8 @@ INIT {
       set_hll_global '==', $P0
       $P0 = get_hll_global '&infix:<!=>'
       set_hll_global '!=', $P0
+      $P0 = get_hll_global '&infix:<=~>'
+      set_hll_global '=~', $P0
       # Note: «,» has different semantics since it's :slurpy.
       $P0 = get_hll_global '&infix:<,>'
       set_hll_global ',', $P0
@@ -387,6 +389,48 @@ sub &infix:«==» ($left, $right) {
 sub &infix:«!=» ($left, $right) {
     pir::does($left, 'string') || pir::does($right, 'string')
         ?? $left ne $right !! $left != $right
+}
+
+sub &infix:«=~» ($left, $right) {
+    my $count;
+    my $result;
+
+    my @functions := import('PCRE', ['init', 'compile', 'match', 'dollar'],
+                            :filename<pcre.pbc>);
+    my $dollar := @functions[3];
+
+  Q:PIR {
+      .local pmc functions, init, compile, match
+      functions = find_lex "@functions"
+      init = functions[0]
+      compile = functions[1]
+      match = functions[2]
+
+      $P0 = init()
+
+      .local pmc str, pattern
+      str = find_lex "$left"
+      pattern = find_lex "$right"
+
+      .local pmc re
+      .local string err
+      .local int errptr
+      (re, err, errptr) = compile(pattern, 0)
+
+      .local pmc count, result
+      (count, result) = match(re, str, 0, 0)
+      store_lex "$count", count
+      store_lex "$result", result
+  };
+
+    my @matches;
+    my $i := 0;
+    while ($i < $count) {
+        @matches.push($dollar($left, $count, $result, $i));
+        $i++;
+    }
+
+    return @matches;
 }
 
 sub &infix:<,>(*@args) {
@@ -578,7 +622,7 @@ sub load ($module) {
   }
 }
 
-sub import ($module, $imports) {
+sub import ($module, $imports, :$filename?) {
   Q:PIR {
       .local pmc module, imports
       .local pmc compiler, namelist, hllns, ns
@@ -592,8 +636,14 @@ sub import ($module, $imports) {
       namelist = compiler.'parse_name'(module)
 
       .local string filename
+      $P1 = find_lex "$filename"
+      filename = $P1
+      unless filename == "" goto have_filename
+
       filename = join '/', namelist
       filename = concat filename, '.pbc'
+
+    have_filename:
       load_bytecode filename
       namelist.'unshift'('parrot')
       ns = get_root_namespace namelist
