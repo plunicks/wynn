@@ -1,4 +1,4 @@
-print $ "1..37\n";
+print $ "1..39\n";
 
 ok = load 'Test';
 
@@ -10,6 +10,8 @@ ok $ ¬("foo" == 0);
 ok $ ¬(0 == "foo");
 ok $ "foo" != 0;
 ok $ 0 != "foo";
+ok $ "" != 0;
+ok $ 0 != "";
 
 ok $ "aaa" < "aab";
 ok $ "aaa" < "aab";
