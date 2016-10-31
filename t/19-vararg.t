@@ -4,8 +4,6 @@ print "1..1\n";
 
 f = ();
 f = x -> y -> {
-    sum = x + y;
-
     # This test will not work if the sum is 0.
     (y == "") && x || f (x + y)
 };
