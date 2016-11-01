@@ -190,6 +190,8 @@ INIT {
       set_hll_global '*', $P0
       $P0 = get_hll_global '&infix:</>'
       set_hll_global '/', $P0
+      $P0 = get_hll_global '&infix:<%>'
+      set_hll_global '%', $P0
       $P0 = get_hll_global '&infix:<+>'
       set_hll_global '+', $P0
       $P0 = get_hll_global '&infix:<->'
@@ -330,6 +332,16 @@ sub &infix:</> ($left, $right) {
         $left;
     } else {
         pir::div($left, +$right);
+    }
+}
+
+sub &infix:<%> ($left, $right) {
+    if pir::typeof($left) eq 'Void' {
+        $left;
+    } elsif pir::typeof($right) eq 'Void' {
+        $right;
+    } else {
+        pir::mod($left, +$right);
     }
 }
 

@@ -104,6 +104,7 @@ token infix:sym<|>  { <sym> <O('%combining-or')> }
 
 token infix:sym<*>  { <sym> <O('%multiplicative')> }
 token infix:sym</>  { <sym> <O('%multiplicative')> }
+token infix:sym<%>  { <sym> <O('%multiplicative')> }
 
 token infix:sym<+>  { <sym> <O('%additive')> }
 token infix:sym<->  { <sym> <O('%additive')> }
